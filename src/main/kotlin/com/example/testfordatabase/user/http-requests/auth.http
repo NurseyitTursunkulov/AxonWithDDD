@@ -26,7 +26,7 @@ Content-Type: application/json
 ###
 
 # CURRENT USER
-GET {{base-url}}/020fe053-7082-4cbf-9694-e4250d452123
+POST {{base-url}}/create
 Accept: application/json
 Authorization: Token {{auth_token}}
 

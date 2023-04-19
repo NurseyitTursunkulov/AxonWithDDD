@@ -1,15 +1,20 @@
 package com.example.testfordatabase.user
 
+import org.axonframework.commandhandling.gateway.CommandGateway
 import org.axonframework.messaging.responsetypes.ResponseTypes
 import org.axonframework.queryhandling.QueryGateway
 import org.springframework.web.bind.annotation.*
 import java.util.*
+import java.util.concurrent.CompletableFuture
 import kotlin.random.Random
 
 @RestController
 @RequestMapping("/customers")
 class CustomerController(private val customerRepository: CustomerRepository,
-                         private val queryGateway: QueryGateway) {
+                         private val queryGateway: QueryGateway,
+                         private val commandGateway: CommandGateway,) {
+    @PostMapping("/create")
+    fun createFoodCart(): CompletableFuture<UUID> = commandGateway.send(CreateFoodCartCommand(UUID.randomUUID()))
 
     @GetMapping("")
     fun getAllCustomers(): List<Customer> {
