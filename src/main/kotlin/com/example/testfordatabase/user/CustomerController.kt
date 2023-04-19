@@ -10,9 +10,26 @@ import kotlin.random.Random
 
 @RestController
 @RequestMapping("/customers")
-class CustomerController(private val customerRepository: CustomerRepository,
-                         private val queryGateway: QueryGateway,
-                         private val commandGateway: CommandGateway,) {
+class CustomerController(
+    private val customerRepository: CustomerRepository,
+    private val queryGateway: QueryGateway,
+    private val commandGateway: CommandGateway,
+) {
+
+    @GetMapping("/find/{foodCartId}")
+    fun findFoodCart(@PathVariable("foodCartId") foodCartId: String): CompletableFuture<FoodCartView> =
+        queryGateway.query(
+            FindFoodCartQuery(UUID.fromString(foodCartId)),
+            ResponseTypes.instanceOf(FoodCartView::class.java)
+        )
+
+    @GetMapping("/find")
+    fun findFoodCartAll(): CompletableFuture<List<FoodCartView>> =
+        queryGateway.query(
+            "FindFoodCarts",Any(),
+            ResponseTypes.multipleInstancesOf(FoodCartView::class.java)
+        )
+
     @PostMapping("/create")
     fun createFoodCart(): CompletableFuture<UUID> = commandGateway.send(CreateFoodCartCommand(UUID.randomUUID()))
 

@@ -10,7 +10,13 @@ internal class FoodCartProjector(private val foodCartViewRepository: FoodCartVie
     @QueryHandler
     fun handle(query: FindFoodCartQuery): FoodCartView {
         print("hello ${query.foodCartId}")
-        return FoodCartView(query.foodCartId,"World")
+        return foodCartViewRepository.findById(query.foodCartId).orElse(null)
+    }
+
+    @QueryHandler(queryName = "FindFoodCarts")
+    fun handle(): Iterable<FoodCartView> {
+        print("hello FindFoodCarts ")
+        return foodCartViewRepository.findAll()
     }
 
     @EventHandler

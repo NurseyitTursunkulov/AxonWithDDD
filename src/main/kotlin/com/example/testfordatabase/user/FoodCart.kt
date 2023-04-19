@@ -25,6 +25,7 @@ internal class FoodCart {
         foodCartId = event.foodCartId
         selectedProducts = mutableMapOf()
         confirmed = false
+        print("Nurs hadi")
     }
 
     companion object {

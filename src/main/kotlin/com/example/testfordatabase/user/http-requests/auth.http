@@ -33,7 +33,7 @@ Authorization: Token {{auth_token}}
 ###
 
 # LOGIN
-POST {{base-url}}/users/login
+GET {{base-url}}/find/0fddedd0-12ea-4835-8a45-da05da360d40
 Content-Type: application/json
 
 {
@@ -49,6 +49,22 @@ Content-Type: application/json
  %}
 
 ###
+
+# LOGIN
+GET {{base-url}}/find
+Content-Type: application/json
+
+{
+  "user": {
+    "email": "drag1@gmail.com",
+    "password": "1234"
+  }
+}
+
+> {%
+    client.assert(typeof response.body.user.token !== "undefined", "No token returned");
+    client.global.set("auth_token", response.body.user.token);
+%}
 
 # UPDATE USER
 PUT {{base-url}}/user
