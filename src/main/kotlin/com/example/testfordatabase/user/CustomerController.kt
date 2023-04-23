@@ -1,11 +1,16 @@
 package com.example.testfordatabase.user
 
+import com.example.testfordatabase.ProfileService.Companion.toProfileResponse
+import com.example.testfordatabase.UserNotFoundException
+import com.example.testfordatabase.swagger.api.ProfileResponseData
 import org.axonframework.commandhandling.gateway.CommandGateway
 import org.axonframework.messaging.responsetypes.ResponseTypes
 import org.axonframework.queryhandling.QueryGateway
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.util.*
 import java.util.concurrent.CompletableFuture
+import java.util.function.Supplier
 import kotlin.random.Random
 
 @RestController
@@ -14,6 +19,7 @@ class CustomerController(
     private val customerRepository: CustomerRepository,
     private val queryGateway: QueryGateway,
     private val commandGateway: CommandGateway,
+    private val userRepository: UserRepository
 ) {
 
     @GetMapping("/find/{foodCartId}")
@@ -33,7 +39,7 @@ class CustomerController(
     @PostMapping("/create")
     fun createFoodCart(): CompletableFuture<UUID> = commandGateway.send(CreateFoodCartCommand(UUID.randomUUID()))
 
-    @GetMapping("")
+    @GetMapping("/allCustomers2")
     fun getAllCustomers(): List<Customer> {
         return customerRepository.findAll()
     }
@@ -43,7 +49,7 @@ class CustomerController(
         return customerRepository.findById(id).get()
     }
 
-    @PostMapping("")
+    @PostMapping("createCustomer")
     fun createCustomer(): Customer {
         queryGateway.query(
             FindFoodCartQuery(UUID.randomUUID()),
@@ -65,5 +71,34 @@ class CustomerController(
     @DeleteMapping("/{id}")
     fun deleteCustomerById(@PathVariable id: Long) {
         customerRepository.deleteById(id)
+    }
+
+    @GetMapping("/profiles/finduser/{username}")
+    fun getProfileByUsername(@PathVariable  username:String?): ResponseEntity<ProfileResponseData?>? {
+        print("buuuka")
+//        username?.let { User(Random.nextLong(),username = it) }?.let { userRepository.save(it) }
+//        "username"?.let {
+//            val user = User(1, username = it)
+//            userRepository.findByUsername(it)?.map {
+//              return@map  ok(toProfileResponse(it, false))
+//            }
+////            customerRepository.save(Customer(Random.nextLong(),"2","3","4"))
+////            return ok(ProfileService.toProfileResponse(user, false))
+//        }
+//        throw UserNotFoundException("username")
+//        return null
+        return  userRepository.findByUsername(username)?.map {
+            ok(toProfileResponse(it, false))
+        } ?.orElseThrow<UserNotFoundException>(Supplier {
+            UserNotFoundException(
+                username
+            )
+        })
+    }
+
+    @GetMapping("/profiles/saveuser/{username}")
+    fun saveUser(@PathVariable  username:String?){
+        print("hadiii")
+        username?.let { MyUser(Random.nextLong(),username = it) }?.let { userRepository.save(it) }
     }
 }

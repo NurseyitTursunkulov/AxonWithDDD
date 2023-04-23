@@ -1,12 +1,9 @@
-package com.example.testfordatabase.user;
+package com.example.testfordatabase.user
 
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository
+import java.util.*
 
-import java.util.Optional;
-@Repository
-public interface UserRepository extends CrudRepository<User, Long> {
-    Optional<User> findByEmail(String username);
-
-    Optional<User> findByUsername(String username);
+interface UserRepository : JpaRepository<MyUser?, Long?> {
+    fun findByEmail(username: String?): Optional<MyUser?>?
+    fun findByUsername(username: String?): Optional<MyUser?>?
 }

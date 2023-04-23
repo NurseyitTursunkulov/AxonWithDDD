@@ -33,7 +33,7 @@ Authorization: Token {{auth_token}}
 ###
 
 # LOGIN
-GET {{base-url}}/find/0fddedd0-12ea-4835-8a45-da05da360d40
+GET {{base-url}}/customers/allCustomers2
 Content-Type: application/json
 
 {
@@ -51,7 +51,7 @@ Content-Type: application/json
 ###
 
 # LOGIN
-GET {{base-url}}/find
+GET {{base-url}}/customers/find
 Content-Type: application/json
 
 {
@@ -81,19 +81,39 @@ Authorization: Token {{auth_token}}
 ###
 
 # GET ALL USERS
-GET {{base-url}}/users
+GET {{base-url}}/customers/profiles/finduser/john
 Accept: application/json
+Content-Type: application/json
 
+{
+  "username": "john",
+  "bio": "Hello, I'm John!",
+  "image": "https://image.com/john.jpg"
+}
+###
+###
+
+# GET ALL USERS
+
+GET {{base-url}}/customers/profiles/saveuser/john
+Accept: application/json
+Content-Type: application/json
+
+{
+  "username": "john",
+  "bio": "Hello, I'm John!",
+  "image": "https://image.com/john.jpg"
+}
 ###
 
 # GET PROFILE - NOT AUTHENTICATED
-GET {{base-url}}/profiles/drag2
+GET {{base-url}}/customers/id=062686ad-fdec-46e2-81c5-93834016d57b
 Accept: application/json
 
 ###
 
 # GET PROFILE - AUTHENTICATED
-GET {{base-url}}/profiles/drag2
+POST {{base-url}}/customers/createCustomer
 Accept: application/json
 Authorization: Token {{auth_token}}
 
