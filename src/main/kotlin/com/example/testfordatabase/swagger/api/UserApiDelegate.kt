@@ -1,45 +1,46 @@
-package com.example.testfordatabase.swagger.api;
+package com.example.testfordatabase.swagger.api
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.context.request.NativeWebRequest;
-
-import java.util.Optional;
+import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
+import org.springframework.web.context.request.NativeWebRequest
+import java.util.*
+import javax.annotation.Generated
 
 /**
- * A delegate to be called by the {@link UserApiController}}.
- * Implement this interface with a {@link org.springframework.stereotype.Service} annotated class.
+ * A delegate to be called by the [UserApiController]}.
+ * Implement this interface with a [org.springframework.stereotype.Service] annotated class.
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-03-19T14:53:52.454350+01:00[Europe/Berlin]")
-public interface UserApiDelegate {
-
-    default Optional<NativeWebRequest> getRequest() {
-        return Optional.empty();
-    }
-
-    /**
-     * GET /user : Get current user
-     * Gets the currently logged-in user
-     *
-     * @return OK (status code 200)
-     *         or Unauthorized (status code 401)
-     *         or Unexpected error (status code 422)
-     * @see UserApi#getCurrentUser
-     */
-    default ResponseEntity<UserResponseData> getCurrentUser() {
-        getRequest().ifPresent(request -> {
-            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"user\" : { \"image\" : \"image\", \"bio\" : \"bio\", \"email\" : \"email\", \"token\" : \"token\", \"username\" : \"username\" } }";
-                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
-                    break;
+@Generated(
+    value = ["org.openapitools.codegen.languages.SpringCodegen"],
+    date = "2023-03-19T14:53:52.454350+01:00[Europe/Berlin]"
+)
+interface UserApiDelegate {
+    val request: Optional<NativeWebRequest>
+        get() = Optional.empty()
+    val currentUser: ResponseEntity<UserResponseData?>?
+        /**
+         * GET /user : Get current user
+         * Gets the currently logged-in user
+         *
+         * @return OK (status code 200)
+         * or Unauthorized (status code 401)
+         * or Unexpected error (status code 422)
+         * @see UserApi.getCurrentUser
+         */
+        get() {
+            request.ifPresent { request: NativeWebRequest ->
+                for (mediaType in MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                    if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                        val exampleString =
+                            "{ \"user\" : { \"image\" : \"image\", \"bio\" : \"bio\", \"email\" : \"email\", \"token\" : \"token\", \"username\" : \"username\" } }"
+                        ApiUtil.setExampleResponse(request, "application/json", exampleString)
+                        break
+                    }
                 }
             }
-        });
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-
-    }
+            return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+        }
 
     /**
      * PUT /user : Update current user
@@ -47,22 +48,21 @@ public interface UserApiDelegate {
      *
      * @param body User details to update. At least **one** field is required. (required)
      * @return OK (status code 200)
-     *         or Unauthorized (status code 401)
-     *         or Unexpected error (status code 422)
-     * @see UserApi#updateCurrentUser
+     * or Unauthorized (status code 401)
+     * or Unexpected error (status code 422)
+     * @see UserApi.updateCurrentUser
      */
-    default ResponseEntity<UserResponseData> updateCurrentUser(UpdateUserRequestData body) {
-        getRequest().ifPresent(request -> {
-            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+    fun updateCurrentUser(body: UpdateUserRequestData?): ResponseEntity<UserResponseData?>? {
+        request.ifPresent { request: NativeWebRequest ->
+            for (mediaType in MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"user\" : { \"image\" : \"image\", \"bio\" : \"bio\", \"email\" : \"email\", \"token\" : \"token\", \"username\" : \"username\" } }";
-                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
-                    break;
+                    val exampleString =
+                        "{ \"user\" : { \"image\" : \"image\", \"bio\" : \"bio\", \"email\" : \"email\", \"token\" : \"token\", \"username\" : \"username\" } }"
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString)
+                    break
                 }
             }
-        });
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-
+        }
+        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
     }
-
 }

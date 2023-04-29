@@ -39,7 +39,7 @@ dependencies {
 	implementation("org.springframework.security:spring-security-core:6.0.2")
 	implementation("org.springframework.security:spring-security-web:6.0.2")
 	implementation("io.jsonwebtoken:jjwt:0.9.1")
-
+	implementation("javax.xml.bind:jaxb-api:2.2.4")
 }
 
 tasks.withType<KotlinCompile> {

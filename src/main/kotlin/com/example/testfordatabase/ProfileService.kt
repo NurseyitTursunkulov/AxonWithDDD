@@ -1,5 +1,8 @@
 package com.example.testfordatabase
 
+import com.example.testfordatabase.follow.FollowRelation
+import com.example.testfordatabase.follow.FollowRelationId
+import com.example.testfordatabase.follow.FollowRelationRepository
 import com.example.testfordatabase.swagger.api.ProfileData
 import com.example.testfordatabase.swagger.api.ProfileResponseData
 import com.example.testfordatabase.swagger.api.ProfilesApiDelegate
@@ -9,80 +12,61 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import org.springframework.web.bind.annotation.*
+import java.util.*
 
-//import io.realworld.backend.application.exception.UserNotFoundException;
-//import io.realworld.backend.application.util.BaseService;
-//import io.realworld.backend.domain.aggregate.follow.FollowRelation;
-//import io.realworld.backend.domain.aggregate.follow.FollowRelationId;
-//import io.realworld.backend.domain.aggregate.follow.FollowRelationRepository;
-//import io.realworld.backend.domain.aggregate.user.User;
-//import io.realworld.backend.domain.aggregate.user.UserRepository;
-//import io.realworld.backend.domain.service.AuthenticationService;
-//import io.realworld.backend.rest.api.ProfileResponseData;
-//import io.realworld.backend.rest.api.ProfilesApiDelegate;
-//import static io.realworld.backend.application.dto.Mappers.toProfileResponse;
 @Service
 @Transactional
+@RestController
 class ProfileService
 /** Creates ProfileService instance.  */ @Autowired constructor(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    override var authenticationService: AuthenticationService,
+    val followRelationRepository: FollowRelationRepository
 ) : BaseService(), ProfilesApiDelegate {
     /** {@inheritDoc}  */
-    override fun followUserByUsername(username: String?): ResponseEntity<ProfileResponseData?>? {
-        return null
-        //    final var currentUser = currentUserOrThrow();
-//
-//    final var user =
-//        userRepository
-//            .findByUsername(username)
-//            .orElseThrow(() -> new UserNotFoundException(username));
-//
-//    final var followRelationId = new FollowRelationId(currentUser.getId(), user.getId());
-//    followRelationRepository
-//        .findById(followRelationId)
-//        .or(
-//            () -> {
-//              final var followRelation = new FollowRelation(currentUser.getId(), user.getId());
-//              followRelationRepository.save(followRelation);
-//              return Optional.of(followRelation);
-//            });
-//
-//    return ok(toProfileResponse(user, true));
+    @PostMapping(value = ["/profiles/{username}/follow"], produces = ["application/json"])
+    override fun followUserByUsername(@PathVariable("username") username: String?): ResponseEntity<ProfileResponseData?>? {
+        var currentUser = currentUserOrThrow();
+
+        var user = userRepository.findByUsername(username)
+
+        currentUser?.let {
+            user?.let {
+                var followRelationId = FollowRelationId(currentUser.id, user.id);
+                followRelationRepository.findById(followRelationId).or {
+                    var followRelation = FollowRelation(followRelationId)
+                    followRelationRepository.save(followRelation)
+                    return@or Optional.of(followRelation)
+                }
+            }
+        }
+
+        return ok(toProfileResponse(user, true));
     }
 
     /** {@inheritDoc}  */
-    override fun getProfileByUsername(username: String?): ResponseEntity<ProfileResponseData?>? {
-      return  userRepository
-          .findByUsername(username)
-          ?.map {
-              ok(toProfileResponse(it, false))
-          }?.orElseThrow{
-              UserNotFoundException(username)
-          }
-
-//        return userRepository
-//            .findByUsername(username)
-//            .map<ResponseEntity<ProfileResponseData>>(Function { u: User? -> ok(toProfileResponse(u, false)) })
-//            .orElseThrow { UserNotFoundException(username) }
+    @GetMapping(value = ["/profiles/{username}"], produces = ["application/json"])
+    override fun getProfileByUsername(@PathVariable("username") username: String?): ResponseEntity<ProfileResponseData?>? {
+        return userRepository
+            .findByUsername(username)
+            ?.let {
+                ok(toProfileResponse(it, false))
+            } ?: run {
+            throw UserNotFoundException(username)
+        }
     }
 
     /** {@inheritDoc}  */
+    @DeleteMapping(value = ["/profiles/{username}/follow"], produces = ["application/json"])
     override fun unfollowUserByUsername(username: String?): ResponseEntity<ProfileResponseData?>? {
-        return null
-        //    final var currentUser = currentUserOrThrow();
-//
-//    final var user = new UserNotFoundException(username);
-//
-//    final var followRelationId = new FollowRelationId(currentUser.getId(), user.getId());
-//    followRelationRepository.deleteById(followRelationId);
-//
-//    return ok(toProfileResponse(user, false));
+        val currentUser = currentUserOrThrow();
+        val user = userRepository
+            .findByUsername(username) ?: kotlin.run { throw UserNotFoundException(username) }
+        val followRelationId = FollowRelationId(currentUser.id, user.id);
+        followRelationRepository.deleteById(followRelationId);
+        return ok(toProfileResponse(user, false));
     }
-
-    /** {@inheritDoc}  */
-//    override fun getAuthenticationService(): AuthenticationService? {
-//        return null
-//    }
 
     companion object {
         fun toProfileResponse(myUser: MyUser?, isFollowing: Boolean): ProfileResponseData? {
@@ -96,14 +80,8 @@ class ProfileService
             myUser: MyUser?,
             isFollowing: Boolean
         ): ProfileData {
-            //    profile.setUsername(user.username);
-//    user.getBio().ifPresent(profile::setBio);
-//    user.getImage().ifPresent(profile::setImage);
-//    profile.setFollowing(isFollowing);
-            return ProfileData()
+            return ProfileData(username = myUser?.username, bio = myUser?.bio, image = myUser?.image, following = isFollowing)
         }
     }
 
-    override val authenticationService: AuthenticationService
-        get() = TODO("Not yet implemented")
 }

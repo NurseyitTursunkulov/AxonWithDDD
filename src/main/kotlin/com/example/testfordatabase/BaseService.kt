@@ -1,5 +1,6 @@
 package com.example.testfordatabase
 
+import com.example.testfordatabase.user.MyUser
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 
@@ -20,9 +21,8 @@ abstract class BaseService {
      * @return current user
      * @throws UserNotFoundException if the current is anonymous
      */
-//    fun currentUserOrThrow(): User {
-//        return authenticationService
-//            .currentUser
-//            .orElseThrow { UserNotFoundException("Can not authenticate") }
-//    }
+    fun currentUserOrThrow(): MyUser {
+        return authenticationService
+            .currentMyUser?: kotlin.run { throw UserNotFoundException("Can not authenticate") }
+    }
 }

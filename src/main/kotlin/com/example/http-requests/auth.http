@@ -107,7 +107,7 @@ Content-Type: application/json
 ###
 
 # GET PROFILE - NOT AUTHENTICATED
-GET {{base-url}}/customers/id=062686ad-fdec-46e2-81c5-93834016d57b
+POST {{base-url}}/profiles/john/follow
 Accept: application/json
 
 ###
@@ -118,6 +118,31 @@ Accept: application/json
 Authorization: Token {{auth_token}}
 
 ###
+# UPDATE ARTICLE
+POST {{base-url}}/createuser  HTTP/1.1
+Content-Type: application/json
+
+{
+  "user": {
+    "username": "nurs",
+    "email": "nurs@mail.ru?",
+    "password": "You have to believe. Please"
+  }
+}
+
+
+###
+# UPDATE ARTICLE
+POST {{base-url}}/login  HTTP/1.1
+Content-Type: application/json
+
+{
+  "user": {
+    "email": "nurs@mail.ru?",
+    "password": "You have to believe. Please"
+  }
+}
+
 
 # FOLLOW USER
 POST {{base-url}}/profiles/drag1/follow
@@ -160,7 +185,19 @@ Authorization: Token {{auth_token}}
 
 # DROP DB
 
-GET {{base-url}}/drop
+POST {{base-url}}/masg HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "john.doe@example.com",
+  "username": "johndoe",
+  "passwordHash": "somehashedpassword",
+  "bio": "Hello, I am John Doe.",
+  "image": "https://example.com/johndoe.jpg"
+}
+
+
+
 
 ###
 

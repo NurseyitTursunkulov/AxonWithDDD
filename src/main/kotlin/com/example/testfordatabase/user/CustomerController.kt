@@ -76,24 +76,10 @@ class CustomerController(
     @GetMapping("/profiles/finduser/{username}")
     fun getProfileByUsername(@PathVariable  username:String?): ResponseEntity<ProfileResponseData?>? {
         print("buuuka")
-//        username?.let { User(Random.nextLong(),username = it) }?.let { userRepository.save(it) }
-//        "username"?.let {
-//            val user = User(1, username = it)
-//            userRepository.findByUsername(it)?.map {
-//              return@map  ok(toProfileResponse(it, false))
-//            }
-////            customerRepository.save(Customer(Random.nextLong(),"2","3","4"))
-////            return ok(ProfileService.toProfileResponse(user, false))
-//        }
-//        throw UserNotFoundException("username")
-//        return null
-        return  userRepository.findByUsername(username)?.map {
+        return  userRepository.findByUsername(username).let {
+
             ok(toProfileResponse(it, false))
-        } ?.orElseThrow<UserNotFoundException>(Supplier {
-            UserNotFoundException(
-                username
-            )
-        })
+        }
     }
 
     @GetMapping("/profiles/saveuser/{username}")

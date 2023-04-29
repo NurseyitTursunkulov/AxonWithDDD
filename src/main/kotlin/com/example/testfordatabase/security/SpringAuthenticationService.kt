@@ -15,25 +15,25 @@ class SpringAuthenticationService @Autowired constructor(
     private val userRepository: UserRepository, private val passwordEncoder: PasswordEncoder
 ) : AuthenticationService {
 
-    override val currentMyUser: Optional<MyUser?>?
+    override val currentMyUser: MyUser?
         get() =
            if( SecurityContextHolder.getContext()?.authentication?.principal  == "anonymousUser"){
                null
            }else{
-               val ud = SecurityContextHolder.getContext().authentication.principal as UserDetails
-               userRepository.findByEmail(ud.username)
+               val ud = SecurityContextHolder.getContext()?.authentication?.principal as? UserDetails
+               userRepository.findByEmail(ud?.username)
            }
 
-    override val currentToken: Optional<String>?
-        get() = Optional.ofNullable(SecurityContextHolder.getContext()?.authentication?.credentials as? String) ?:null
+    override val currentToken: String?
+        get() = (SecurityContextHolder.getContext()?.authentication?.credentials as? String) ?:null
 
-    override fun authenticate(email: String?, password: String?): Optional<MyUser?>? {
+    override fun authenticate(email: String?, password: String?): MyUser? {
        return userRepository
-            .findByEmail(email)?.flatMap {user ->
-                if (passwordEncoder.matches(password, user?.passwordHash)) {
-                    return@flatMap Optional.of(user!!)
+            .findByEmail(email)?.let {user ->
+                if (passwordEncoder.matches(password, user.passwordHash)) {
+                    return user
                 } else {
-                    return@flatMap Optional.empty<MyUser>()
+                    return MyUser()
                 }
             }
     }

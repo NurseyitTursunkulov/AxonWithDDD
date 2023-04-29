@@ -22,13 +22,11 @@ class ProfilesController(
     @GetMapping("/profiles/{username}")
     fun getProfileByUsername(username: String?): ResponseEntity<ProfileResponseData?>? {
         print("buuuka")
-      return  userRepository.findByUsername(username)?.map {
-                ok(toProfileResponse(it, false))
-        } ?.orElseThrow<UserNotFoundException>(Supplier {
-            UserNotFoundException(
-                username
-            )
-        })
+        return userRepository.findByUsername(username)?.let {
+            ok(toProfileResponse(it, false))
+        } ?: kotlin.run {
+            throw UserNotFoundException(username)
+        }
     }
 
     fun toProfileResponse(myUser: MyUser?, isFollowing: Boolean): ProfileResponseData? {
