@@ -31,10 +31,10 @@ data class MyUser(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     val id: Long = 0,
-    val email: String = "",
+    var email: String = "",
     val passwordHash: String = "",
-    val bio: String? = null,
-    val image: String? = null,
+    var bio: String? = null,
+    var image: String? = null,
     @Column(name = "enabled")
     val enabled: Boolean = true,
     private var username: String = "",
@@ -62,6 +62,10 @@ data class MyUser(
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> = roles.map { SimpleGrantedAuthority(it.name) }.toMutableList()
 
     override fun getPassword(): String = password
+
+    fun setUsername(username: String){
+        this.username = username
+    }
 
     override fun getUsername(): String = username
 

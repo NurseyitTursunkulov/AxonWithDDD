@@ -152,10 +152,31 @@ Authorization: Token {{auth_token}}
 
 ###
 
-# UNFOLLOW USER
+# FOLLOW USER
 POST {{base-url}}/profiles/nurs/follow
 Accept: application/json
 Authorization: Token {{auth_token}}
+
+###
+
+###
+
+# updateCurrentUser USER
+POST {{base-url}}/updateCurrentUser  HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "user": {
+    "username": "buha",
+    "email": "huk@mail.ru?",
+    "password": "You have to believe. Please",
+    "bio": "You have to believe. Please",
+    "token": "You have to believe. Please",
+    "image": "You have to believe. Please"
+  }
+}
+
 
 ###
 

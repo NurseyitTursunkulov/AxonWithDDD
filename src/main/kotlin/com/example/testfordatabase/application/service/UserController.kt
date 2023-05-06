@@ -1,13 +1,14 @@
 package com.example.testfordatabase.application.service
 
-import com.example.testfordatabase.domain.service.AuthenticationService
-import com.example.testfordatabase.application.exception.UserNotFoundException
+import com.example.testfordatabase.application.dto.mapper.toUserResponse
+import com.example.testfordatabase.application.dto.mapper.updateUser
 import com.example.testfordatabase.application.exception.EmailAlreadyUsedException
 import com.example.testfordatabase.application.exception.InvalidPasswordException
+import com.example.testfordatabase.application.exception.UserNotFoundException
 import com.example.testfordatabase.application.exception.UsernameAlreadyUsedException
-import com.example.testfordatabase.application.dto.mapper.toUserResponse
 import com.example.testfordatabase.domain.aggregate.user.MyUser
 import com.example.testfordatabase.domain.aggregate.user.UserRepository
+import com.example.testfordatabase.domain.service.AuthenticationService
 import com.example.testfordatabase.security.JwtService
 import com.example.testfordatabase.swagger.api.*
 import org.springframework.http.ResponseEntity
@@ -73,6 +74,31 @@ class UserController(
             .authenticate(loginUserData?.email, loginUserData?.password)
             ?.let { u -> ok(toUserResponse(u, jwtService.generateToken(u))) }
             ?:run { throw InvalidPasswordException("Can not authenticate - $email") }
+    }
+
+    @PostMapping("/updateCurrentUser")
+    fun updateCurrentUser(@RequestBody req: UpdateUserRequestData): ResponseEntity<UserResponseData?>? {
+        val user: MyUser = authenticationService
+            .currentMyUser?: kotlin.run {
+                throw UserNotFoundException("User not found")
+        }
+        val update: UpdateUserData? = req.user
+        val email: String? = update?.email
+        if (email != null && email != user.email) {
+            userRepository
+                .findByEmail(email)?.let {
+                    throw EmailAlreadyUsedException("Email already used - $email")
+                }
+        }
+        val username: String? = update?.username
+        if (username != null && username != user.username) {
+            userRepository
+                .findByUsername(username)?.let {
+                    throw UsernameAlreadyUsedException("Username already used - $username")
+                }
+        }
+        update?.let { updateUser(user, it) }
+        return ok(toUserResponse(user, authenticationService.currentToken?:""))
     }
 
 }
