@@ -1,4 +1,4 @@
-package com.example.testfordatabase.follow
+package com.example.testfordatabase.domain.aggregate.follow
 
 import org.springframework.data.repository.CrudRepository
 

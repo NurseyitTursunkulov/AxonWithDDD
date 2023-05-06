@@ -1,4 +1,4 @@
-package com.example.testfordatabase.follow
+package com.example.testfordatabase.domain.aggregate.follow
 
 import com.google.common.base.MoreObjects
 import jakarta.persistence.EmbeddedId
@@ -9,7 +9,7 @@ import org.springframework.lang.NonNull
 data class FollowRelation(
     @EmbeddedId
     @NonNull
-    var id:FollowRelationId = FollowRelationId(0, 0)
+    var id: FollowRelationId = FollowRelationId(0, 0)
 ) {
     override fun toString(): String {
         return MoreObjects.toStringHelper(this).add("id", id).toString()

@@ -1,7 +1,6 @@
-package com.example.testfordatabase
+package com.example.testfordatabase.domain.service
 
-import com.example.testfordatabase.user.MyUser
-import java.util.*
+import com.example.testfordatabase.domain.aggregate.user.MyUser
 
 interface AuthenticationService {
     /** Returns current authenticated user.  */

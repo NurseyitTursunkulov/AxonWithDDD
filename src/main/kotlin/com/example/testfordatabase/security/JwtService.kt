@@ -1,6 +1,6 @@
 package com.example.testfordatabase.security
 
-import com.example.testfordatabase.user.MyUser
+import com.example.testfordatabase.domain.aggregate.user.MyUser
 import java.util.*
 
 interface JwtService {

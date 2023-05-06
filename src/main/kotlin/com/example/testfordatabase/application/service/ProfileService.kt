@@ -1,18 +1,18 @@
-package com.example.testfordatabase
+package com.example.testfordatabase.application.service
 
-import com.example.testfordatabase.follow.FollowRelation
-import com.example.testfordatabase.follow.FollowRelationId
-import com.example.testfordatabase.follow.FollowRelationRepository
+import com.example.testfordatabase.application.exception.UserNotFoundException
+import com.example.testfordatabase.application.util.BaseService
+import com.example.testfordatabase.domain.aggregate.follow.FollowRelation
+import com.example.testfordatabase.domain.aggregate.follow.FollowRelationId
+import com.example.testfordatabase.domain.aggregate.follow.FollowRelationRepository
 import com.example.testfordatabase.swagger.api.ProfileData
 import com.example.testfordatabase.swagger.api.ProfileResponseData
 import com.example.testfordatabase.swagger.api.ProfilesApiDelegate
-import com.example.testfordatabase.user.MyUser
-import com.example.testfordatabase.user.UserRepository
+import com.example.testfordatabase.domain.aggregate.user.MyUser
+import com.example.testfordatabase.domain.aggregate.user.UserRepository
+import com.example.testfordatabase.domain.service.AuthenticationService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
-import org.springframework.security.core.Authentication
-import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.*

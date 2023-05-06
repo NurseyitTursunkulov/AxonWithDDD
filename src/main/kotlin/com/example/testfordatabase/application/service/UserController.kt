@@ -1,12 +1,13 @@
-package com.example.testfordatabase.user
+package com.example.testfordatabase.application.service
 
-import com.example.testfordatabase.AuthenticationService
-import com.example.testfordatabase.BaseService
-import com.example.testfordatabase.UserNotFoundException
-import com.example.testfordatabase.exception.EmailAlreadyUsedException
-import com.example.testfordatabase.exception.InvalidPasswordException
-import com.example.testfordatabase.exception.UsernameAlreadyUsedException
-import com.example.testfordatabase.mapper.toUserResponse
+import com.example.testfordatabase.domain.service.AuthenticationService
+import com.example.testfordatabase.application.exception.UserNotFoundException
+import com.example.testfordatabase.application.exception.EmailAlreadyUsedException
+import com.example.testfordatabase.application.exception.InvalidPasswordException
+import com.example.testfordatabase.application.exception.UsernameAlreadyUsedException
+import com.example.testfordatabase.application.dto.mapper.toUserResponse
+import com.example.testfordatabase.domain.aggregate.user.MyUser
+import com.example.testfordatabase.domain.aggregate.user.UserRepository
 import com.example.testfordatabase.security.JwtService
 import com.example.testfordatabase.swagger.api.*
 import org.springframework.http.ResponseEntity
@@ -25,7 +26,7 @@ import java.util.*
 class UserController(
     var userRepository: UserRepository,
     var jwtService: JwtService,
-     var authenticationService: AuthenticationService
+    var authenticationService: AuthenticationService
 ) {
 
      val request: Optional<NativeWebRequest>

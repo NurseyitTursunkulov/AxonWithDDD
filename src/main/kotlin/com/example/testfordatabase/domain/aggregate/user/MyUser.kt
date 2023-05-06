@@ -1,4 +1,4 @@
-package com.example.testfordatabase.user
+package com.example.testfordatabase.domain.aggregate.user
 
 import com.example.testfordatabase.security.JwtTokenFilter
 import jakarta.persistence.*
@@ -38,7 +38,7 @@ data class MyUser(
     @Column(name = "enabled")
     val enabled: Boolean = true,
     private var username: String = "",
-            private val password:String = "",
+    private val password:String = "",
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "users_roles",

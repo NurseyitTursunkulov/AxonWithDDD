@@ -1,5 +1,6 @@
-package com.example.testfordatabase.user
+package com.example.testfordatabase.domain.aggregate.user
 
+import com.example.testfordatabase.domain.aggregate.user.MyUser
 import org.springframework.data.jpa.repository.JpaRepository
 import java.util.*
 

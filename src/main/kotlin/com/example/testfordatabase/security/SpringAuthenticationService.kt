@@ -1,14 +1,12 @@
 package com.example.testfordatabase.security
 
-import com.example.testfordatabase.AuthenticationService
-import com.example.testfordatabase.user.MyUser
-import com.example.testfordatabase.user.UserRepository
+import com.example.testfordatabase.domain.service.AuthenticationService
+import com.example.testfordatabase.domain.aggregate.user.MyUser
+import com.example.testfordatabase.domain.aggregate.user.UserRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
-import java.util.*
 
 @Service
 class SpringAuthenticationService @Autowired constructor(
@@ -27,7 +25,7 @@ class SpringAuthenticationService @Autowired constructor(
     override val currentToken: String?
         get() = (SecurityContextHolder.getContext()?.authentication?.credentials as? String) ?:null
 
-    var curUser:MyUser? = null
+    var curUser: MyUser? = null
     override fun authenticate(email: String?, password: String?): MyUser? {
        return userRepository
             .findByEmail(email)?.let {user ->

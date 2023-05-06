@@ -1,11 +1,10 @@
-package com.example.testfordatabase.user
+package com.example.testfordatabase.application.service
 
-import com.example.testfordatabase.AuthenticationService
-import com.example.testfordatabase.BaseService
-import com.example.testfordatabase.ProfileService
-import com.example.testfordatabase.UserNotFoundException
-import com.example.testfordatabase.follow.FollowRelation
-import com.example.testfordatabase.follow.FollowRelationId
+import com.example.testfordatabase.domain.service.AuthenticationService
+import com.example.testfordatabase.application.util.BaseService
+import com.example.testfordatabase.application.exception.UserNotFoundException
+import com.example.testfordatabase.domain.aggregate.user.MyUser
+import com.example.testfordatabase.domain.aggregate.user.UserRepository
 import com.example.testfordatabase.swagger.api.ProfileResponseData
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

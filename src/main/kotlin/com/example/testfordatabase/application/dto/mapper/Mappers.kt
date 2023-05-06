@@ -1,8 +1,8 @@
-package com.example.testfordatabase.mapper
+package com.example.testfordatabase.application.dto.mapper
 
 import com.example.testfordatabase.swagger.api.UserData
 import com.example.testfordatabase.swagger.api.UserResponseData
-import com.example.testfordatabase.user.MyUser
+import com.example.testfordatabase.domain.aggregate.user.MyUser
 
 
     fun toUserResponse(u: MyUser, token: String?): UserResponseData? {

@@ -1,7 +1,7 @@
 package com.example.testfordatabase.security
 
-import com.example.testfordatabase.user.MyUser
-import com.example.testfordatabase.user.UserRepository
+import com.example.testfordatabase.domain.aggregate.user.MyUser
+import com.example.testfordatabase.domain.aggregate.user.UserRepository
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import org.springframework.beans.factory.annotation.Autowired

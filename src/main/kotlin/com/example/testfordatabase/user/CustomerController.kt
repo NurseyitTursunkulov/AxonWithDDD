@@ -1,7 +1,9 @@
 package com.example.testfordatabase.user
 
-import com.example.testfordatabase.ProfileService.Companion.toProfileResponse
-import com.example.testfordatabase.UserNotFoundException
+import com.example.testfordatabase.domain.aggregate.user.MyUser
+import com.example.testfordatabase.domain.aggregate.user.UserRepository
+import com.example.testfordatabase.application.service.ProfileService.Companion.toProfileResponse
+import com.example.testfordatabase.application.service.ok
 import com.example.testfordatabase.swagger.api.ProfileResponseData
 import org.axonframework.commandhandling.gateway.CommandGateway
 import org.axonframework.messaging.responsetypes.ResponseTypes
@@ -10,7 +12,6 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.util.*
 import java.util.concurrent.CompletableFuture
-import java.util.function.Supplier
 import kotlin.random.Random
 
 @RestController

@@ -1,6 +1,6 @@
 package com.example.testfordatabase.security
 
-import com.example.testfordatabase.user.MyUser
+import com.example.testfordatabase.domain.aggregate.user.MyUser
 import jakarta.servlet.FilterChain
 import jakarta.servlet.ServletException
 import jakarta.servlet.http.HttpServletRequest

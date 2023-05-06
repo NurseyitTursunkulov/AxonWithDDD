@@ -1,6 +1,8 @@
-package com.example.testfordatabase
+package com.example.testfordatabase.application.util
 
-import com.example.testfordatabase.user.MyUser
+import com.example.testfordatabase.application.exception.UserNotFoundException
+import com.example.testfordatabase.domain.aggregate.user.MyUser
+import com.example.testfordatabase.domain.service.AuthenticationService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 
