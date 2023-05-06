@@ -30,6 +30,8 @@ class UserController(
 
      val request: Optional<NativeWebRequest>
         get() = TODO("Not yet implemented")
+
+    @GetMapping("getcurrentuser")
     fun getCurrentUser(): ResponseEntity<UserResponseData?>? {
         return authenticationService
             .currentMyUser
@@ -71,6 +73,5 @@ class UserController(
             ?.let { u -> ok(toUserResponse(u, jwtService.generateToken(u))) }
             ?:run { throw InvalidPasswordException("Can not authenticate - $email") }
     }
-
 
 }

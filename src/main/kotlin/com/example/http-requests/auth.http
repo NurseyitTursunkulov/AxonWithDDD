@@ -121,11 +121,12 @@ Authorization: Token {{auth_token}}
 # UPDATE ARTICLE
 POST {{base-url}}/createuser  HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer {{auth_token}}
 
 {
   "user": {
-    "username": "nurs",
-    "email": "nurs@mail.ru?",
+    "username": "huk",
+    "email": "huk@mail.ru?",
     "password": "You have to believe. Please"
   }
 }
@@ -138,21 +139,21 @@ Content-Type: application/json
 
 {
   "user": {
-    "email": "nurs@mail.ru?",
+    "email": "huk@mail.ru?",
     "password": "You have to believe. Please"
   }
 }
 
 
-# FOLLOW USER
-POST {{base-url}}/profiles/drag1/follow
+### FOLLOW USER
+GET {{base-url}}/getcurrentuser
 Accept: application/json
 Authorization: Token {{auth_token}}
 
 ###
 
 # UNFOLLOW USER
-DELETE {{base-url}}/profiles/drag1/follow
+POST {{base-url}}/profiles/nurs/follow
 Accept: application/json
 Authorization: Token {{auth_token}}
 

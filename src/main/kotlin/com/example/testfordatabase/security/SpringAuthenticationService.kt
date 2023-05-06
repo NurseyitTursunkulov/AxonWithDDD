@@ -16,24 +16,26 @@ class SpringAuthenticationService @Autowired constructor(
 ) : AuthenticationService {
 
     override val currentMyUser: MyUser?
-        get() =
-           if( SecurityContextHolder.getContext()?.authentication?.principal  == "anonymousUser"){
-               null
-           }else{
-               val ud = SecurityContextHolder.getContext()?.authentication?.principal as? UserDetails
-               userRepository.findByEmail(ud?.username)
-           }
+        get() = curUser
+//           if( SecurityContextHolder.getContext()?.authentication?.principal  == "anonymousUser"){
+//               null
+//           }else{
+//               val ud = SecurityContextHolder.getContext()?.authentication?.principal as? UserDetails
+//               userRepository.findByEmail(ud?.username)
+//           }
 
     override val currentToken: String?
         get() = (SecurityContextHolder.getContext()?.authentication?.credentials as? String) ?:null
 
+    var curUser:MyUser? = null
     override fun authenticate(email: String?, password: String?): MyUser? {
        return userRepository
             .findByEmail(email)?.let {user ->
                 if (passwordEncoder.matches(password, user.passwordHash)) {
+                    curUser = user
                     return user
                 } else {
-                    return MyUser()
+                    return null
                 }
             }
     }
