@@ -180,6 +180,17 @@ Authorization: Bearer {{auth_token}}
 
 ###
 
+###
+
+# FOLLOW USER
+GET {{base-url}}/profiles/huk
+Accept: application/json
+Authorization: Token {{auth_token}}
+
+###
+
+###
+
 # CREATE ARTICLE
 POST {{base-url}}/articles
 Content-Type: application/json
