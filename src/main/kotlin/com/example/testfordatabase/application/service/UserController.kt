@@ -30,19 +30,19 @@ class UserController(
     var authenticationService: AuthenticationService
 ) {
 
-     val request: Optional<NativeWebRequest>
+    val request: Optional<NativeWebRequest>
         get() = TODO("Not yet implemented")
 
     @GetMapping("getcurrentuser")
     fun getCurrentUser(): ResponseEntity<UserResponseData?>? {
         return authenticationService
             .currentMyUser
-            ?.let { u -> ok(toUserResponse(u, authenticationService.currentToken?:"")) }
-            ?:run{ throw UserNotFoundException("User not found") }
+            ?.let { u -> ok(toUserResponse(u, authenticationService.currentToken ?: "")) }
+            ?: run { throw UserNotFoundException("User not found") }
     }
 
     @PostMapping("/createuser")
-     fun createUser( @RequestBody req: NewUserRequestData): ResponseEntity<UserResponseData?>? {
+    fun createUser(@RequestBody req: NewUserRequestData): ResponseEntity<UserResponseData?>? {
         val newUserData: NewUserData? = req.user
         val username: String? = newUserData?.username
         val email: String? = newUserData?.email
@@ -52,20 +52,21 @@ class UserController(
         userRepository
             .findByEmail(email)
             ?.let { u -> throw EmailAlreadyUsedException("Email already used - $email") }
-         email?.let {
-             username?.let {
-                 newUserData.password?.let {
-                     authenticationService.encodePassword(newUserData.password)?.let {passwort->
-                         val newUser = MyUser(email = email, username =  username, passwordHash = passwort)
-                         val user: MyUser = userRepository.save(newUser)
-                         return ok(toUserResponse(user, jwtService.generateToken(user)))
-                     }
+        email?.let {
+            username?.let {
+                newUserData.password?.let {
+                    authenticationService.encodePassword(newUserData.password)?.let { passwort ->
+                        val newUser = MyUser(email = email, username = username, passwordHash = passwort)
+                        val user: MyUser = userRepository.save(newUser)
+                        return ok(toUserResponse(user, jwtService.generateToken(user)))
+                    }
 
-                 }
-             }
-         }
+                }
+            }
+        }
         return null
     }
+
     @PostMapping("/login")
     fun login(@RequestBody body: LoginUserRequestData): ResponseEntity<UserResponseData?>? {
         val loginUserData: LoginUserData? = body.user
@@ -73,14 +74,14 @@ class UserController(
         return authenticationService
             .authenticate(loginUserData?.email, loginUserData?.password)
             ?.let { u -> ok(toUserResponse(u, jwtService.generateToken(u))) }
-            ?:run { throw InvalidPasswordException("Can not authenticate - $email") }
+            ?: run { throw InvalidPasswordException("Can not authenticate - $email") }
     }
 
     @PostMapping("/updateCurrentUser")
     fun updateCurrentUser(@RequestBody req: UpdateUserRequestData): ResponseEntity<UserResponseData?>? {
         val user: MyUser = authenticationService
-            .currentMyUser?: kotlin.run {
-                throw UserNotFoundException("User not found")
+            .currentMyUser ?: kotlin.run {
+            throw UserNotFoundException("User not found")
         }
         val update: UpdateUserData? = req.user
         val email: String? = update?.email
@@ -98,7 +99,7 @@ class UserController(
                 }
         }
         update?.let { updateUser(user, it) }
-        return ok(toUserResponse(user, authenticationService.currentToken?:""))
+        return ok(toUserResponse(user, authenticationService.currentToken ?: ""))
     }
 
 }

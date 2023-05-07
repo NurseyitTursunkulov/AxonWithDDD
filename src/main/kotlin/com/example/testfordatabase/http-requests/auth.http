@@ -153,7 +153,14 @@ Authorization: Token {{auth_token}}
 ###
 
 # FOLLOW USER
-POST {{base-url}}/profiles/nurs/follow
+POST {{base-url}}/profiles/huk/follow
+Accept: application/json
+Authorization: Token {{auth_token}}
+
+###
+
+# UNFOLLOW USER
+DELETE {{base-url}}/profiles/huk/follow
 Accept: application/json
 Authorization: Token {{auth_token}}
 

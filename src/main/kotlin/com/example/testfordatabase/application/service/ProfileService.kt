@@ -30,45 +30,51 @@ class ProfileService
     /** {@inheritDoc}  */
     @PostMapping(value = ["/profiles/{username}/follow"], produces = ["application/json"])
     override fun followUserByUsername(@PathVariable("username") username: String?): ResponseEntity<ProfileResponseData?>? {
-        var currentUser = currentUserOrThrow();
+        val currentUser: MyUser = currentUserOrThrow()
+        val user: MyUser = userRepository
+            .findByUsername(username)
+            ?: run { throw UserNotFoundException(username) }
 
-        var user = userRepository.findByUsername(username)
-
-        currentUser?.let {
-            user?.let {
-                var followRelationId = FollowRelationId(currentUser.id, user.id);
-                followRelationRepository.findById(followRelationId).or {
-                    var followRelation = FollowRelation(followRelationId)
-                    followRelationRepository.save(followRelation)
-                    return@or Optional.of(followRelation)
-                }
+        val followRelationId = FollowRelationId(currentUser.id, user.id)
+        followRelationRepository
+            .findById(followRelationId)
+            .or {
+                val followRelation = FollowRelation(FollowRelationId(currentUser.id, user.id))
+                followRelationRepository.save(followRelation)
+                Optional.of(followRelation)
             }
-        }
 
-        return ok(toProfileResponse(user, true));
+        return ok(toProfileResponse(user, true))
     }
 
     /** {@inheritDoc}  */
     @GetMapping(value = ["/profiles/{username}"], produces = ["application/json"])
     override fun getProfileByUsername(@PathVariable("username") username: String?): ResponseEntity<ProfileResponseData?>? {
-        return userRepository
-            .findByUsername(username)
-            ?.let {
-                ok(toProfileResponse(it, false))
-            } ?: run {
+        val currentUser: MyUser? = authenticationService.currentMyUser
+        val func: (MyUser) -> Boolean = { user ->
+            currentUser?.let {
+                followRelationRepository
+                    .findById(FollowRelationId(it.id, user.id)).isPresent
+            } ?: false
+        }
+
+        return userRepository.findByUsername(username)?.let {
+            ok(toProfileResponse(it, func(it)))
+        } ?: kotlin.run {
             throw UserNotFoundException(username)
         }
     }
 
     /** {@inheritDoc}  */
     @DeleteMapping(value = ["/profiles/{username}/follow"], produces = ["application/json"])
-    override fun unfollowUserByUsername(username: String?): ResponseEntity<ProfileResponseData?>? {
-        val currentUser = currentUserOrThrow();
-        val user = userRepository
-            .findByUsername(username) ?: kotlin.run { throw UserNotFoundException(username) }
-        val followRelationId = FollowRelationId(currentUser.id, user.id);
-        followRelationRepository.deleteById(followRelationId);
-        return ok(toProfileResponse(user, false));
+    override fun unfollowUserByUsername(@PathVariable username: String?): ResponseEntity<ProfileResponseData?>? {
+        val currentUser: MyUser = currentUserOrThrow()
+        val user: MyUser = userRepository
+            .findByUsername(username)
+            ?:run { throw UserNotFoundException(username) }
+        val followRelationId = FollowRelationId(currentUser.id, user.id)
+        followRelationRepository.deleteById(followRelationId)
+        return ok(toProfileResponse(user, false))
     }
 
     companion object {
