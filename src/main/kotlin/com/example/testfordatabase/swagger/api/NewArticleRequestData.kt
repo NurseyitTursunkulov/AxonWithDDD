@@ -6,43 +6,30 @@ import java.util.*
 import javax.annotation.Generated
 
 /**
- * SingleArticleResponseData
+ * NewArticleRequestData
  */
 @Generated(
     value = ["org.openapitools.codegen.languages.SpringCodegen"],
     date = "2023-03-19T14:53:52.454350+01:00[Europe/Berlin]"
 )
-class SingleArticleResponseData {
+data class NewArticleRequestData(@get:ApiModelProperty(required = true, value = "")
+                                 @JsonProperty("article")
+                                 var article: NewArticleData) {
     /**
      * Get article
      * @return article
      */
-    @get:ApiModelProperty(required = true, value = "")
-    @JsonProperty("article")
-    var article: ArticleData? = null
-    fun article(article: ArticleData?): SingleArticleResponseData {
+
+    fun article(article: NewArticleData): NewArticleRequestData {
         this.article = article
         return this
     }
 
-    override fun equals(o: Any?): Boolean {
-        if (this === o) {
-            return true
-        }
-        if (o == null || javaClass != o.javaClass) {
-            return false
-        }
-        val singleArticleResponse = o as SingleArticleResponseData
-        return article == singleArticleResponse.article
-    }
 
-    override fun hashCode(): Int {
-        return Objects.hash(article)
-    }
 
     override fun toString(): String {
         val sb = StringBuilder()
-        sb.append("class SingleArticleResponseData {\n")
+        sb.append("class NewArticleRequestData {\n")
         sb.append("    article: ").append(toIndentedString(article)).append("\n")
         sb.append("}")
         return sb.toString()

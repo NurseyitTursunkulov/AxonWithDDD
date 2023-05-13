@@ -199,7 +199,7 @@ Authorization: Token {{auth_token}}
 ###
 
 # CREATE ARTICLE
-POST {{base-url}}/articles
+GET {{base-url}}/createArticle
 Content-Type: application/json
 Accept: application/json
 Authorization: Token {{auth_token}}
