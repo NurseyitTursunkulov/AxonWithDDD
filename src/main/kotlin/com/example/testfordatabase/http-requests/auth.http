@@ -222,8 +222,15 @@ Authorization: Token {{auth_token}}
  %}
 ###
 
-# CREATE ARTICLE
-GET {{base-url}}/getArticle/my-puupy-2-640275916
+# DELETE ARTICLE
+DELETE {{base-url}}/deleteArticle/my-puupy-2-905428986
+Content-Type: application/json
+Accept: application/json
+Authorization: Token {{auth_token}}
+###
+
+# CREATE ARTICLE FAVORITE
+GET {{base-url}}/createArticleFavorite/my-puupy-2-1037399026
 Content-Type: application/json
 Accept: application/json
 Authorization: Token {{auth_token}}

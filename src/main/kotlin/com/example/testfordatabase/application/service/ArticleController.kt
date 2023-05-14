@@ -8,24 +8,23 @@ import com.example.testfordatabase.application.util.BaseService
 import com.example.testfordatabase.domain.aggregate.article.Article
 import com.example.testfordatabase.domain.aggregate.article.ArticleRepository
 import com.example.testfordatabase.domain.aggregate.comment.CommentRepository
+import com.example.testfordatabase.domain.aggregate.favorite.ArticleFavourite
 import com.example.testfordatabase.domain.aggregate.favorite.ArticleFavouriteId
 import com.example.testfordatabase.domain.aggregate.favorite.ArticleFavouriteRepository
 import com.example.testfordatabase.domain.aggregate.follow.FollowRelationId
 import com.example.testfordatabase.domain.aggregate.follow.FollowRelationRepository
+import com.example.testfordatabase.domain.aggregate.user.MyUser
 import com.example.testfordatabase.domain.service.AuthenticationService
 import com.example.testfordatabase.swagger.api.NewArticleRequestData
 import com.example.testfordatabase.swagger.api.SingleArticleResponseData
 import com.example.testfordatabase.swagger.api.UpdateArticleData
 import com.example.testfordatabase.swagger.api.UpdateArticleRequestData
-import org.mapstruct.factory.Mappers
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @Service
 @Transactional
@@ -68,6 +67,34 @@ class ArticleController
                 articleResponse(article)
             }
             ?:run{ throw ArticleNotFoundException(slug) }
+    }
+    @DeleteMapping("deleteArticle/{slug}")
+    fun deleteArticle(@PathVariable("slug") slug: String?): ResponseEntity<Unit> {
+        articleRepository
+            .findBySlug(slug)
+            ?.let { article ->
+                commentRepository.deleteByArticleId(article.id)
+                articleRepository.delete(article)
+            }
+        return ResponseEntity(HttpStatus.OK)
+    }
+
+    @GetMapping("createArticleFavorite/{slug}")
+    fun createArticleFavorite(@PathVariable("slug") slug: String?): ResponseEntity<SingleArticleResponseData?>? {
+        val currentUser: MyUser = currentUserOrThrow()
+        return articleRepository
+            .findBySlug(slug)
+            ?.let { article ->
+                val favId = ArticleFavouriteId(currentUser.id, article.id)
+                articleFavouriteRepository
+                    .findById(favId)
+                    .orElseGet {
+                        val fav = ArticleFavourite(currentUser.id, article.id)
+                        articleFavouriteRepository.save(fav)
+                    }
+                articleResponse(article)
+            }
+            ?:run {throw ArticleNotFoundException(slug) }
     }
 
     private fun articleResponse(article: Article): ResponseEntity<SingleArticleResponseData?>{
