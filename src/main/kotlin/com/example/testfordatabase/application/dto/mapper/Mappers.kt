@@ -44,7 +44,7 @@ fun updateUser(user: MyUser, update: UpdateUserData) {
 
 fun fromNewArticleData(newArticleData: NewArticleData, user: MyUser): Article {
     val article = Article()
-    newArticleData.title?.let { article.title = (it) }
+    newArticleData.title?.let { article.setTitle(it) }
     article.description = (newArticleData.description)
     article.body = (newArticleData.body)
     article.author = (user)
@@ -70,7 +70,7 @@ private fun toArticleData(
     val articleData = ArticleData().apply {
         slug = article.slug
         title = article.title
-        description = description
+        description = article.description
         body = article. body
         tagList = article.tags?.toMutableList()
         createdAt = article.createdAt?.atOffset(ZoneOffset.UTC)

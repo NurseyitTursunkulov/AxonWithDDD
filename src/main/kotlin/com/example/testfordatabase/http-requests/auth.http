@@ -220,7 +220,25 @@ Authorization: Token {{auth_token}}
  if(response.body.article !== undefined && response.body.article.slug !== undefined)
    client.global.set("slug", response.body.article.slug);
  %}
+###
 
+# CREATE ARTICLE
+GET {{base-url}}/getArticle/my-puupy-2-640275916
+Content-Type: application/json
+Accept: application/json
+Authorization: Token {{auth_token}}
+
+{
+  "article": {
+    "title": "My puupy 2",
+    "description": "is awesome",
+    "body": "I love him 2",
+    "tagList": [
+      "home",
+      "dragons"
+    ]
+  }
+}
 ###
 
 # DROP DB

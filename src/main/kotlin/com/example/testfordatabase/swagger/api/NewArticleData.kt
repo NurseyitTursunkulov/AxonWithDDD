@@ -23,6 +23,7 @@ data class NewArticleData(
     @get:ApiModelProperty(required = true, value = "")
     @JsonProperty("body")
     var body: String? = null,
+    var slug:String?=null,
     @JsonProperty("tagList")
      var tagList: @Valid MutableList<String>? = null
 ) {

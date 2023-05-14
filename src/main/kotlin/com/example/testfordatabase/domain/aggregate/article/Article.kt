@@ -14,17 +14,26 @@ data class Article(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long = 0,
-    var slug: @NotNull String? = "",
-    var title: @NotNull String? = "",
     var description: @NotNull String? = "",
     var body: @NotNull String? = "",
     @ElementCollection(fetch = FetchType.EAGER)
-     var tags: @NotNull MutableSet<String>? = ImmutableSet.of(),
+    var tags: @NotNull MutableSet<String>? = ImmutableSet.of(),
     @ManyToOne
     var author: @NotNull MyUser = MyUser(),
     var createdAt: @NotNull Instant? = Instant.now(),
     var updatedAt: @NotNull Instant? = Instant.now()
 ) {
+    var title: @NotNull String = ""
+        private set
+
+    fun setTitle(title: String) {
+        this.slug = title.lowercase(Locale.getDefault())
+            .replace("[\\&|[\\uFE30-\\uFFA0]|\\’|\\”|\\s\\?\\,\\.]+".toRegex(), "-") + "-" + ThreadLocalRandom.current()
+            .nextInt()
+        this.title = title
+    }
+
+    var slug: String? = title
 
     @PreUpdate
     fun onUpdate() {
