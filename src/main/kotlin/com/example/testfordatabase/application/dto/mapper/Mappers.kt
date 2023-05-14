@@ -3,9 +3,7 @@ package com.example.testfordatabase.application.dto.mapper
 import com.example.testfordatabase.domain.aggregate.article.Article
 import com.example.testfordatabase.domain.aggregate.user.MyUser
 import com.example.testfordatabase.swagger.api.*
-import com.google.common.collect.ImmutableList
 import com.google.common.collect.ImmutableSet
-import org.mapstruct.factory.Mappers
 import java.time.ZoneOffset
 
 
@@ -88,5 +86,20 @@ fun toProfile(user: MyUser, isFollowing: Boolean): ProfileData {
     user.bio?.let { profile.bio = it }
     profile.following = (isFollowing)
     return profile
+}
+
+fun updateArticle(article: Article, updateArticleData: UpdateArticleData) {
+    val title: String = updateArticleData.title
+    if (title != null) {
+        article.setTitle(title)
+    }
+    val description: String = updateArticleData.description
+    if (description != null) {
+        article.description = (description)
+    }
+    val body: String = updateArticleData.body
+    if (body != null) {
+        article.body = (body)
+    }
 }
 class FavouriteInfo(val isFavorited: Boolean, val favoritesCount: Int)

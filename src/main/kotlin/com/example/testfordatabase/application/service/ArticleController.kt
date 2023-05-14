@@ -15,6 +15,9 @@ import com.example.testfordatabase.domain.aggregate.follow.FollowRelationReposit
 import com.example.testfordatabase.domain.service.AuthenticationService
 import com.example.testfordatabase.swagger.api.NewArticleRequestData
 import com.example.testfordatabase.swagger.api.SingleArticleResponseData
+import com.example.testfordatabase.swagger.api.UpdateArticleData
+import com.example.testfordatabase.swagger.api.UpdateArticleRequestData
+import org.mapstruct.factory.Mappers
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
@@ -52,7 +55,22 @@ class ArticleController
             ?: throw ArticleNotFoundException(slug)
     }
 
-    private fun articleResponse(article: Article): ResponseEntity<SingleArticleResponseData?>? {
+    @GetMapping("updateArticle/{slug}")
+    fun updateArticle(
+        @PathVariable("slug") slug: String?, @RequestBody req: UpdateArticleRequestData
+    ): ResponseEntity<SingleArticleResponseData?>? {
+        return articleRepository
+            .findBySlug(slug)
+            ?.let { article ->
+                val updateArticleData: UpdateArticleData = req.article
+                com.example.testfordatabase.application.dto.mapper.updateArticle(article, updateArticleData)
+                articleRepository.save(article)
+                articleResponse(article)
+            }
+            ?:run{ throw ArticleNotFoundException(slug) }
+    }
+
+    private fun articleResponse(article: Article): ResponseEntity<SingleArticleResponseData?>{
         val isFollowingAuthor: Boolean = isFollowingAuthor(article)
         val isFavoured = authenticationService
             .currentMyUser?.let { currentUser ->

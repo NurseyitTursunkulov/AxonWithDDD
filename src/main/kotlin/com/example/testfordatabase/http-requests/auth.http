@@ -240,6 +240,26 @@ Authorization: Token {{auth_token}}
   }
 }
 ###
+###
+
+# CREATE ARTICLE
+GET {{base-url}}/updateArticle/my-puupy-2-1637921792
+Content-Type: application/json
+Accept: application/json
+Authorization: Token {{auth_token}}
+
+{
+  "article": {
+    "title": "My puupy 3",
+    "description": "is not awesome",
+    "body": "I love him 2",
+    "tagList": [
+      "home",
+      "dragons"
+    ]
+  }
+}
+###
 
 # DROP DB
 
