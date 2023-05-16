@@ -96,6 +96,18 @@ class ArticleController
             }
             ?:run {throw ArticleNotFoundException(slug) }
     }
+    @DeleteMapping("deleteArticleFavorite/{slug}")
+    fun deleteArticleFavorite(@PathVariable("slug") slug: String?): ResponseEntity<SingleArticleResponseData?>? {
+        val currentUser: MyUser = currentUserOrThrow()
+        return articleRepository
+            .findBySlug(slug)
+            ?.let { article ->
+                val favId = ArticleFavouriteId(currentUser.id, article.id)
+                articleFavouriteRepository.deleteById(favId)
+                articleResponse(article)
+            }
+            ?:run { throw ArticleNotFoundException(slug) }
+    }
 
     private fun articleResponse(article: Article): ResponseEntity<SingleArticleResponseData?>{
         val isFollowingAuthor: Boolean = isFollowingAuthor(article)
