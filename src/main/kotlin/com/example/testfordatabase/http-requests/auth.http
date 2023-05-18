@@ -230,7 +230,7 @@ Authorization: Token {{auth_token}}
 ###
 
 # CREATE ARTICLE FAVORITE
-GET {{base-url}}/createArticleFavorite/my-puupy-2--1027689461
+GET {{base-url}}/createArticleFavorite/my-puupy-2-2133760990
 Content-Type: application/json
 Accept: application/json
 Authorization: Token {{auth_token}}
@@ -270,7 +270,7 @@ Authorization: Token {{auth_token}}
 ###
 
 # CREATE ARTICLE COMMENT
-GET {{base-url}}/createArticleComment/my-puupy-2-1403387272
+GET {{base-url}}/createArticleComment/my-puupy-2-690960887
 Content-Type: application/json
 Accept: application/json
 Authorization: Token {{auth_token}}
@@ -281,6 +281,38 @@ Authorization: Token {{auth_token}}
   }
 }
 ###
+
+###
+
+# DELETE ARTICLE COMMENT
+DELETE {{base-url}}/deleteArticleComment/my-puupy-2-690960887/1
+Content-Type: application/json
+Accept: application/json
+Authorization: Token {{auth_token}}
+
+{
+  "comment": {
+    "body": "My puupy 3"
+  }
+}
+###
+
+
+###
+
+# DELETE ARTICLE COMMENT
+GET {{base-url}}/getArticleComments/my-puupy-2-690960887
+Content-Type: application/json
+Accept: application/json
+Authorization: Token {{auth_token}}
+
+{
+  "comment": {
+    "body": "My puupy 3"
+  }
+}
+###
+
 # DROP DB
 
 POST {{base-url}}/masg HTTP/1.1

@@ -7,6 +7,7 @@ import com.example.testfordatabase.swagger.api.*
 import com.google.common.collect.ImmutableSet
 import org.mapstruct.factory.Mappers
 import java.time.ZoneOffset
+import java.util.stream.Collectors
 
 
 fun toUserResponse(u: MyUser, token: String?): UserResponseData? {
@@ -128,5 +129,27 @@ fun toSingleCommentResponseData(
     commentData.updatedAt = comment.updatedAt?.atOffset(ZoneOffset.UTC)
     resp.comment = commentData
     return resp
+}
+
+fun toMultipleCommentsResponseData(
+    comments: List<Comment>?, followingIds: Set<Long?>
+): MultipleCommentsResponseData {
+    val commentsResponseData = MultipleCommentsResponseData()
+    val commentDataList = comments?.stream()
+        ?.map<CommentData> { c: Comment ->
+
+            val commentData = CommentData()
+            commentData.id = (c.id.toInt())
+            commentData.body = (c.body)
+            commentData.author = (
+                toProfile(c.author, followingIds.contains(c.author.id))
+            )
+            commentData.createdAt = (c.createdAt?.atOffset(ZoneOffset.UTC))
+            commentData.updatedAt = (c.updatedAt?.atOffset(ZoneOffset.UTC))
+            commentData
+        }
+        ?.collect(Collectors.toList())
+    commentsResponseData.comments = commentDataList
+    return commentsResponseData
 }
 class FavouriteInfo(val isFavorited: Boolean, val favoritesCount: Int)

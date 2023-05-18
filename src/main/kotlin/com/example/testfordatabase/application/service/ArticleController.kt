@@ -15,13 +15,13 @@ import com.example.testfordatabase.domain.aggregate.follow.FollowRelationReposit
 import com.example.testfordatabase.domain.aggregate.user.MyUser
 import com.example.testfordatabase.domain.service.AuthenticationService
 import com.example.testfordatabase.swagger.api.*
-import org.mapstruct.factory.Mappers
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.*
+import java.util.stream.Collectors
 
 @Service
 @Transactional
@@ -123,6 +123,33 @@ class ArticleController
             ?:run {throw ArticleNotFoundException(slug) }
     }
 
+    @DeleteMapping("deleteArticleComment/{slug}/{id}")
+    fun deleteArticleComment(  @PathVariable("slug") slug: String?,  @PathVariable("id")  id: Int): ResponseEntity<Void?>? {
+        commentRepository.deleteById(id.toLong())
+        return ResponseEntity(HttpStatus.OK)
+    }
+
+    @GetMapping("getArticleComments/{slug}")
+    fun getArticleComments( @PathVariable("slug") slug: String?): ResponseEntity<MultipleCommentsResponseData?>? {
+        return articleRepository
+            .findBySlug(slug)
+            ?.let { article ->
+                val comments: List<Comment>? = commentRepository.findByArticleId(article.id)
+                ok(toMultipleCommentsResponseData(comments, followingIds()))
+            }
+            ?:run { throw ArticleNotFoundException(slug) }
+    }
+
+    private fun followingIds(): Set<Long?> {
+        return authenticationService
+            .currentMyUser
+            ?.let { currentUser ->
+                followRelationRepository.findByIdFollowerId(currentUser.id)!!.stream()
+                    .map { f -> f?.id?.followeeId }
+                    .collect(Collectors.toSet())
+            }
+            ?:(emptySet())
+    }
     private fun articleResponse(article: Article): ResponseEntity<SingleArticleResponseData?>{
         val isFollowingAuthor: Boolean = isFollowingAuthor(article)
         val isFavoured = authenticationService
