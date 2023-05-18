@@ -1,9 +1,11 @@
 package com.example.testfordatabase.application.dto.mapper
 
 import com.example.testfordatabase.domain.aggregate.article.Article
+import com.example.testfordatabase.domain.aggregate.comment.Comment
 import com.example.testfordatabase.domain.aggregate.user.MyUser
 import com.example.testfordatabase.swagger.api.*
 import com.google.common.collect.ImmutableSet
+import org.mapstruct.factory.Mappers
 import java.time.ZoneOffset
 
 
@@ -101,5 +103,30 @@ fun updateArticle(article: Article, updateArticleData: UpdateArticleData) {
     if (body != null) {
         article.body = (body)
     }
+}
+
+fun fromNewCommentData(
+    commentData: NewCommentData, article: Article, author: MyUser
+): Comment {
+    val comment = Comment().apply {
+        this.article = article
+        this.author = author
+        this.body = commentData.body
+    }
+    return comment
+}
+
+fun toSingleCommentResponseData(
+    comment: Comment, isFollowingAuthor: Boolean
+): SingleCommentResponseData {
+    val resp = SingleCommentResponseData()
+    val commentData = CommentData()
+    commentData.id = comment.id.toInt()
+    commentData.author = toProfile(comment.author, isFollowingAuthor)
+    commentData.body = comment.body
+    commentData.createdAt = comment.createdAt?.atOffset(ZoneOffset.UTC)
+    commentData.updatedAt = comment.updatedAt?.atOffset(ZoneOffset.UTC)
+    resp.comment = commentData
+    return resp
 }
 class FavouriteInfo(val isFavorited: Boolean, val favoritesCount: Int)

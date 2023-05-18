@@ -1,12 +1,11 @@
 package com.example.testfordatabase.application.service
 
-import com.example.testfordatabase.application.dto.mapper.FavouriteInfo
-import com.example.testfordatabase.application.dto.mapper.fromNewArticleData
-import com.example.testfordatabase.application.dto.mapper.toSingleArticleResponse
+import com.example.testfordatabase.application.dto.mapper.*
 import com.example.testfordatabase.application.exception.ArticleNotFoundException
 import com.example.testfordatabase.application.util.BaseService
 import com.example.testfordatabase.domain.aggregate.article.Article
 import com.example.testfordatabase.domain.aggregate.article.ArticleRepository
+import com.example.testfordatabase.domain.aggregate.comment.Comment
 import com.example.testfordatabase.domain.aggregate.comment.CommentRepository
 import com.example.testfordatabase.domain.aggregate.favorite.ArticleFavourite
 import com.example.testfordatabase.domain.aggregate.favorite.ArticleFavouriteId
@@ -15,10 +14,8 @@ import com.example.testfordatabase.domain.aggregate.follow.FollowRelationId
 import com.example.testfordatabase.domain.aggregate.follow.FollowRelationRepository
 import com.example.testfordatabase.domain.aggregate.user.MyUser
 import com.example.testfordatabase.domain.service.AuthenticationService
-import com.example.testfordatabase.swagger.api.NewArticleRequestData
-import com.example.testfordatabase.swagger.api.SingleArticleResponseData
-import com.example.testfordatabase.swagger.api.UpdateArticleData
-import com.example.testfordatabase.swagger.api.UpdateArticleRequestData
+import com.example.testfordatabase.swagger.api.*
+import org.mapstruct.factory.Mappers
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -107,6 +104,23 @@ class ArticleController
                 articleResponse(article)
             }
             ?:run { throw ArticleNotFoundException(slug) }
+    }
+    @GetMapping("createArticleComment/{slug}")
+    fun createArticleComment(
+        @PathVariable("slug") slug: String, @RequestBody commentData: NewCommentRequestData
+    ): ResponseEntity<SingleCommentResponseData?>? {
+        val currentUser: MyUser = currentUserOrThrow()
+        return articleRepository
+            .findBySlug(slug)?.let { article:Article ->
+                val isFollowingAuthor = isFollowingAuthor(article)
+                val comment: Comment = fromNewCommentData(commentData.comment, article, currentUser)
+                ok(
+                    toSingleCommentResponseData(
+                        commentRepository.save(comment), isFollowingAuthor
+                    )
+                )
+            }
+            ?:run {throw ArticleNotFoundException(slug) }
     }
 
     private fun articleResponse(article: Article): ResponseEntity<SingleArticleResponseData?>{

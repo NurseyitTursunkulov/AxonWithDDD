@@ -1,79 +1,58 @@
-package com.example.testfordatabase.swagger.api;
+package com.example.testfordatabase.swagger.api
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.ApiModelProperty;
-
-import javax.validation.Valid;
-import javax.validation.constraints.*;
-import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty
+import io.swagger.annotations.ApiModelProperty
+import java.util.*
+import javax.annotation.Generated
 
 /**
  * SingleCommentResponseData
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-03-19T14:53:52.454350+01:00[Europe/Berlin]")
-public class SingleCommentResponseData   {
-  @JsonProperty("comment")
-  private CommentData comment;
-
-  public SingleCommentResponseData comment(CommentData comment) {
-    this.comment = comment;
-    return this;
-  }
-
-  /**
-   * Get comment
-   * @return comment
-  */
-  @ApiModelProperty(required = true, value = "")
-  @NotNull
-
-  @Valid
-
-  public CommentData getComment() {
-    return comment;
-  }
-
-  public void setComment(CommentData comment) {
-    this.comment = comment;
-  }
-
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
+@Generated(
+    value = ["org.openapitools.codegen.languages.SpringCodegen"],
+    date = "2023-03-19T14:53:52.454350+01:00[Europe/Berlin]"
+)
+class SingleCommentResponseData {
+    /**
+     * Get comment
+     * @return comment
+     */
+    @get:ApiModelProperty(required = true, value = "")
+    @JsonProperty("comment")
+    var comment: CommentData? = null
+    fun comment(comment: CommentData?): SingleCommentResponseData {
+        this.comment = comment
+        return this
     }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
+
+    override fun equals(o: Any?): Boolean {
+        if (this === o) {
+            return true
+        }
+        if (o == null || javaClass != o.javaClass) {
+            return false
+        }
+        val singleCommentResponse = o as SingleCommentResponseData
+        return comment == singleCommentResponse.comment
     }
-    SingleCommentResponseData singleCommentResponse = (SingleCommentResponseData) o;
-    return Objects.equals(this.comment, singleCommentResponse.comment);
-  }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(comment);
-  }
-
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class SingleCommentResponseData {\n");
-    
-    sb.append("    comment: ").append(toIndentedString(comment)).append("\n");
-    sb.append("}");
-    return sb.toString();
-  }
-
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
+    override fun hashCode(): Int {
+        return Objects.hash(comment)
     }
-    return o.toString().replace("\n", "\n    ");
-  }
+
+    override fun toString(): String {
+        val sb = StringBuilder()
+        sb.append("class SingleCommentResponseData {\n")
+        sb.append("    comment: ").append(toIndentedString(comment)).append("\n")
+        sb.append("}")
+        return sb.toString()
+    }
+
+    /**
+     * Convert the given object to string with each line indented by 4 spaces
+     * (except the first line).
+     */
+    private fun toIndentedString(o: Any?): String {
+        return o?.toString()?.replace("\n", "\n    ") ?: "null"
+    }
 }
-
