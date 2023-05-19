@@ -24,7 +24,6 @@ import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.*
-import java.util.stream.Collectors
 
 @Service
 @Transactional
@@ -155,6 +154,27 @@ class ArticleController
         return articlesResponse(articles, articleCount)
     }
 
+    @GetMapping("getArticles/{tag}/{author}/{favorited}/{limit}/{offset}")
+    fun getArticles(
+        @PathVariable("tag")  tag: String,@PathVariable("author")  author: String,@PathVariable("favorited")  favorited: String,  @PathVariable("limit") limit: Int,@PathVariable("offset")  offset: Int
+    ): ResponseEntity<MultipleArticlesResponseData?>? {
+        val articles:  List<Article> = articleRepository.findByFilters(
+            tag,
+            author,
+            favorited,
+            OffsetBasedPageRequest.of(
+                offset,
+                limit, Sort.by(Sort.Direction.DESC, "createdAt")
+            )
+        )
+        val articleCount: Int = articleRepository.countByFilter(tag, author, favorited)
+        return articlesResponse(articles, articleCount)
+    }
+
+    @GetMapping("tagsGet")
+    fun tagsGet(): ResponseEntity<TagsResponseData?>? {
+        return ok(toTagsResponseData(articleRepository.findAllTags()))
+    }
     private fun articlesResponse(
         articles: List<Article>, articleCount: Int
     ): ResponseEntity<MultipleArticlesResponseData?> {

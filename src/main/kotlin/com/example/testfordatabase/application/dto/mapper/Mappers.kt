@@ -5,9 +5,7 @@ import com.example.testfordatabase.domain.aggregate.comment.Comment
 import com.example.testfordatabase.domain.aggregate.user.MyUser
 import com.example.testfordatabase.swagger.api.*
 import com.google.common.collect.ImmutableSet
-import org.mapstruct.factory.Mappers
 import java.time.ZoneOffset
-import java.util.function.Function
 import java.util.stream.Collectors
 
 
@@ -182,4 +180,10 @@ fun toMultipleArticlesResponseData(
     multipleArticlesResponseData.setArticles(articleDataList)
     multipleArticlesResponseData.articlesCount = count
     return multipleArticlesResponseData
+}
+
+fun toTagsResponseData(tags: List<String?>?): TagsResponseData? {
+    val tagsResponseData = TagsResponseData()
+    tagsResponseData.tags = tags
+    return tagsResponseData
 }
