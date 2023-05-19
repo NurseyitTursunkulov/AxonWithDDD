@@ -7,6 +7,7 @@ import com.example.testfordatabase.swagger.api.*
 import com.google.common.collect.ImmutableSet
 import org.mapstruct.factory.Mappers
 import java.time.ZoneOffset
+import java.util.function.Function
 import java.util.stream.Collectors
 
 
@@ -153,3 +154,32 @@ fun toMultipleCommentsResponseData(
     return commentsResponseData
 }
 class FavouriteInfo(val isFavorited: Boolean, val favoritesCount: Int)
+class MultipleFavouriteInfo(
+    val favouritedArticleIds: Set<Long>, val favouritedCountByArticleId: Map<Long, Long>
+)
+
+fun toMultipleArticlesResponseData(
+    articles: Collection<Article>,
+    multipleFavouriteInfo: MultipleFavouriteInfo,
+    followingIds: Set<Long?>,
+    count: Int
+): MultipleArticlesResponseData {
+    val multipleArticlesResponseData = MultipleArticlesResponseData()
+    val articleDataList = articles.map { article: Article ->
+                toArticleData(
+                    article,
+                    FavouriteInfo(
+                        multipleFavouriteInfo
+                            .favouritedArticleIds
+                            .contains(article.id),
+                        multipleFavouriteInfo.favouritedCountByArticleId
+                            .getOrDefault(article.id, 0L)
+                            .toInt()
+                    ),
+                    followingIds.contains(article.author.id)
+                )
+            }
+    multipleArticlesResponseData.setArticles(articleDataList)
+    multipleArticlesResponseData.articlesCount = count
+    return multipleArticlesResponseData
+}

@@ -107,7 +107,7 @@ Content-Type: application/json
 ###
 
 # GET PROFILE - NOT AUTHENTICATED
-POST {{base-url}}/profiles/john/follow
+POST {{base-url}}/profiles/huk/follow
 Accept: application/json
 
 ###
@@ -230,7 +230,7 @@ Authorization: Token {{auth_token}}
 ###
 
 # CREATE ARTICLE FAVORITE
-GET {{base-url}}/createArticleFavorite/my-puupy-2-2133760990
+GET {{base-url}}/createArticleFavorite/my-puupy-2-190733943
 Content-Type: application/json
 Accept: application/json
 Authorization: Token {{auth_token}}
@@ -270,7 +270,7 @@ Authorization: Token {{auth_token}}
 ###
 
 # CREATE ARTICLE COMMENT
-GET {{base-url}}/createArticleComment/my-puupy-2-690960887
+GET {{base-url}}/createArticleComment/my-puupy-2-190733943
 Content-Type: application/json
 Accept: application/json
 Authorization: Token {{auth_token}}
@@ -301,7 +301,7 @@ Authorization: Token {{auth_token}}
 ###
 
 # DELETE ARTICLE COMMENT
-GET {{base-url}}/getArticleComments/my-puupy-2-690960887
+GET {{base-url}}/getArticleComments/my-puupy-2--1575630571
 Content-Type: application/json
 Accept: application/json
 Authorization: Token {{auth_token}}
@@ -315,7 +315,7 @@ Authorization: Token {{auth_token}}
 
 # DROP DB
 
-POST {{base-url}}/masg HTTP/1.1
+GET {{base-url}}/articles/feed/20/0
 Content-Type: application/json
 
 {

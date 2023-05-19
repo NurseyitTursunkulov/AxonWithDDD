@@ -9,7 +9,7 @@ import java.util.*
 
 interface ArticleRepository : PagingAndSortingRepository<Article?, Long?> , CrudRepository<Article, Long>{
     fun findBySlug(slug: String?): Article?
-    fun findByAuthorIdIn(authorIds: Collection<Long?>?, pageable: Pageable?): List<Article?>?
+    fun findByAuthorIdIn(authorIds: Collection<Long?>?, pageable: Pageable?): List<Article>?
 
 //    @Query("""
 //    SELECT DISTINCT a

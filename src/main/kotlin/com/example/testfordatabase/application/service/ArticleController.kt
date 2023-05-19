@@ -5,6 +5,7 @@ import com.example.testfordatabase.application.exception.ArticleNotFoundExceptio
 import com.example.testfordatabase.application.util.BaseService
 import com.example.testfordatabase.domain.aggregate.article.Article
 import com.example.testfordatabase.domain.aggregate.article.ArticleRepository
+import com.example.testfordatabase.domain.aggregate.article.OffsetBasedPageRequest
 import com.example.testfordatabase.domain.aggregate.comment.Comment
 import com.example.testfordatabase.domain.aggregate.comment.CommentRepository
 import com.example.testfordatabase.domain.aggregate.favorite.ArticleFavourite
@@ -15,7 +16,9 @@ import com.example.testfordatabase.domain.aggregate.follow.FollowRelationReposit
 import com.example.testfordatabase.domain.aggregate.user.MyUser
 import com.example.testfordatabase.domain.service.AuthenticationService
 import com.example.testfordatabase.swagger.api.*
+import org.mapstruct.factory.Mappers
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.Sort
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
@@ -139,14 +142,49 @@ class ArticleController
             }
             ?:run { throw ArticleNotFoundException(slug) }
     }
+    @GetMapping("articles/feed/{limit}/{offset}")
+    fun getArticlesFeed(
+        @PathVariable("limit")  limit: Int = 20, @PathVariable("offset")  offset: Int = 0
+    ): ResponseEntity<MultipleArticlesResponseData?>? {
+        val followingIds = followingIds()
+        val articles: List<Article> = articleRepository.findByAuthorIdIn(
+            followingIds,
+            OffsetBasedPageRequest.of(offset, limit, Sort.by(Sort.Direction.DESC, "createdAt"))
+        )?: emptyList()
+        val articleCount: Int = articleRepository.countByAuthorIdIn(followingIds)
+        return articlesResponse(articles, articleCount)
+    }
 
-    private fun followingIds(): Set<Long?> {
+    private fun articlesResponse(
+        articles: List<Article>, articleCount: Int
+    ): ResponseEntity<MultipleArticlesResponseData?> {
+        val articleIds = articles.map { it.id }
+        val favouritedCounts = articleFavouriteRepository.countByIdArticleIds(articleIds)
+            ?.groupBy { it.articleId }
+            ?.mapValues { it.value.size.toLong() }?: mapOf()
+
+
+        val favourited:Set<Long> =    authenticationService
+            .currentMyUser?.let { currentUser ->
+                articleFavouriteRepository.findByIdUserId(currentUser.id)?.map { articleFavourite ->
+                    articleFavourite.id.articleId
+                }?.toSet()
+            }
+            ?: setOf<Long>()
+        val favouriteInfo =  MultipleFavouriteInfo(favourited, favouritedCounts)
+        return ok(
+            toMultipleArticlesResponseData(
+                articles, favouriteInfo, followingIds(), articleCount
+            )
+        )
+    }
+
+
+    private fun followingIds(): Set<Long> {
         return authenticationService
             .currentMyUser
             ?.let { currentUser ->
-                followRelationRepository.findByIdFollowerId(currentUser.id)!!.stream()
-                    .map { f -> f?.id?.followeeId }
-                    .collect(Collectors.toSet())
+                followRelationRepository.findByIdFollowerId(currentUser.id)?.map { f -> f.id.followeeId }?.toSet()
             }
             ?:(emptySet())
     }

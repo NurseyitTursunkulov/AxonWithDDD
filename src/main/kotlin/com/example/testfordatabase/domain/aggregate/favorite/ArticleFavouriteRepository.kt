@@ -13,6 +13,6 @@ interface ArticleFavouriteRepository : CrudRepository<ArticleFavourite?, Article
                 + "FavouriteCount(f.id.articleId, COUNT(*)) "
                 + "FROM ArticleFavourite f WHERE f.id.articleId IN (:articleIds) GROUP BY f.id.articleId"
     )
-    fun countByIdArticleIds(articleIds: List<Long?>?): List<FavouriteCount?>?
-    fun findByIdUserId(userId: Long): List<ArticleFavourite?>?
+    fun countByIdArticleIds(articleIds: List<Long?>?): List<FavouriteCount>?
+    fun findByIdUserId(userId: Long): List<ArticleFavourite>?
 }
