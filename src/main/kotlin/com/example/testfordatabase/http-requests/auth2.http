@@ -3,7 +3,7 @@
 < {%
     request.variables.set("auth_token", "")
 %}
-POST {{base-url}}/createuser  HTTP/1.1
+POST {{base-url}}/createuser2  HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 

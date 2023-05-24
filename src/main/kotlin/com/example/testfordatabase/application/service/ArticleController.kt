@@ -158,7 +158,7 @@ class ArticleController
     fun getArticles(
         @PathVariable("tag")  tag: String,@PathVariable("author")  author: String,@PathVariable("favorited")  favorited: String,  @PathVariable("limit") limit: Int,@PathVariable("offset")  offset: Int
     ): ResponseEntity<MultipleArticlesResponseData?>? {
-        val articles:  List<Article> = articleRepository.findByFilters(
+        val articles:  List<Article> = listOf() /*articleRepository.findByFilters(
             tag,
             author,
             favorited,
@@ -166,8 +166,8 @@ class ArticleController
                 offset,
                 limit, Sort.by(Sort.Direction.DESC, "createdAt")
             )
-        )
-        val articleCount: Int = articleRepository.countByFilter(tag, author, favorited)
+        )*/
+        val articleCount: Int = 0/*articleRepository.countByFilter(tag, author, favorited)*/
         return articlesResponse(articles, articleCount)
     }
 

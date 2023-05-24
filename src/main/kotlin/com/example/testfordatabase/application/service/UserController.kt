@@ -6,11 +6,15 @@ import com.example.testfordatabase.application.exception.EmailAlreadyUsedExcepti
 import com.example.testfordatabase.application.exception.InvalidPasswordException
 import com.example.testfordatabase.application.exception.UserNotFoundException
 import com.example.testfordatabase.application.exception.UsernameAlreadyUsedException
+import com.example.testfordatabase.domain.aggregate.user.CreateUserCommand
 import com.example.testfordatabase.domain.aggregate.user.MyUser
 import com.example.testfordatabase.domain.aggregate.user.UserRepository
 import com.example.testfordatabase.domain.service.AuthenticationService
 import com.example.testfordatabase.security.JwtService
 import com.example.testfordatabase.swagger.api.*
+import org.axonframework.commandhandling.gateway.CommandGateway
+import org.axonframework.queryhandling.QueryGateway
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -20,6 +24,10 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.context.request.NativeWebRequest
 import java.util.*
+import java.util.concurrent.CompletableFuture
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
 
 @Service
 @Transactional
@@ -27,7 +35,9 @@ import java.util.*
 class UserController(
     var userRepository: UserRepository,
     var jwtService: JwtService,
-    var authenticationService: AuthenticationService
+    var authenticationService: AuthenticationService,
+    private val commandGateway: CommandGateway,
+    private val queryGateway: QueryGateway
 ) {
 
     val request: Optional<NativeWebRequest>
@@ -40,6 +50,21 @@ class UserController(
             ?.let { u -> ok(toUserResponse(u, authenticationService.currentToken ?: "")) }
             ?: run { throw UserNotFoundException("User not found") }
     }
+    private val logger: Logger = LoggerFactory.getLogger(UserController::class.java)
+    @PostMapping("/createuser2")
+    fun createUser2(@RequestBody req: NewUserRequestData): CompletableFuture<ResponseEntity<UserResponseData>?> {
+            logger.debug("This is a debug level message")
+        return commandGateway.send<UserResponseData?>(CreateUserCommand(UUID.randomUUID().toString(),req)).thenApply {
+            logger.debug("This is a debug level message")
+            ok(it)
+        }
+            .exceptionally {
+//                val responseData = UserResponseData("Error occurred: ${ex.message}")
+                    (ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null))
+//                return ResponseEntity.badRequest()!!
+            }
+    }
+
 
     @PostMapping("/createuser")
     fun createUser(@RequestBody req: NewUserRequestData): ResponseEntity<UserResponseData?>? {
