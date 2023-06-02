@@ -7,7 +7,7 @@ import org.springframework.data.repository.PagingAndSortingRepository
 import org.springframework.data.repository.query.Param
 import java.util.*
 
-interface ArticleRepository : PagingAndSortingRepository<Article?, Long?> , CrudRepository<Article, Long>{
+interface ArticleRepository : PagingAndSortingRepository<Article?, Long?>{
     fun findBySlug(slug: String?): Article?
     fun findByAuthorIdIn(authorIds: Collection<Long?>?, pageable: Pageable?): List<Article>?
 
@@ -45,5 +45,5 @@ interface ArticleRepository : PagingAndSortingRepository<Article?, Long?> , Crud
     fun countByAuthorIdIn(authorIds: Collection<Long?>?): Int
 
     @Query("SELECT t from Article a LEFT JOIN a.tags t")
-    fun findAllTags(): List<String?>?
+    fun findAllTags(): List<String>?
 }

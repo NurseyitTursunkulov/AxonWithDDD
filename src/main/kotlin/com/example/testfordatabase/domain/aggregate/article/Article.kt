@@ -3,10 +3,10 @@ package com.example.testfordatabase.domain.aggregate.article
 import com.example.testfordatabase.domain.aggregate.user.MyUser
 import com.google.common.base.MoreObjects
 import com.google.common.collect.ImmutableSet
-import jakarta.persistence.*
 import java.time.Instant
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
+import javax.persistence.*
 import javax.validation.constraints.NotNull
 
 @Entity

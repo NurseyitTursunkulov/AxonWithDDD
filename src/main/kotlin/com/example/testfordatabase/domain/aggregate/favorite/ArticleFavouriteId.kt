@@ -1,7 +1,7 @@
 package com.example.testfordatabase.domain.aggregate.favorite
 
 import com.google.common.base.MoreObjects
-import jakarta.persistence.Embeddable
+import javax.persistence.*
 import java.io.Serializable
 import java.util.*
 

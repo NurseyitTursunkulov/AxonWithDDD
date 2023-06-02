@@ -1,8 +1,6 @@
 package com.example.testfordatabase.domain.aggregate.user
 
 import com.example.testfordatabase.security.JwtTokenFilter
-import jakarta.persistence.*
-import jakarta.servlet.http.HttpServletRequest
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -23,11 +21,17 @@ import org.springframework.security.web.authentication.HttpStatusEntryPoint
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.stereotype.Service
 import org.springframework.web.cors.CorsConfiguration
+import javax.persistence.Column
+import javax.persistence.JoinColumn
+import javax.persistence.JoinTable
+import javax.persistence.ManyToMany
+import javax.servlet.http.HttpServletRequest
+import javax.persistence.*
 
 
 //import com.google.common.base.MoreObjects;
 @Entity
-data class MyUser(
+data class MyUser   (
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     val id: Long = 0,
@@ -99,59 +103,3 @@ class UserDetailsServiceImpl(private val userRepository: UserRepository) : UserD
 }
 
 
-@Configuration
-@EnableWebSecurity
-class UserSecurityConfig @Autowired constructor(
-    private val jwtTokenFilter: JwtTokenFilter
-){
-
-    @Bean
-    fun filterChain(http: HttpSecurity): SecurityFilterChain {
-        http.cors()
-            .configurationSource { request: HttpServletRequest? ->
-                val cors = CorsConfiguration()
-                cors.allowedOrigins = listOf(
-                    "http://localhost:8080",
-                    "https://editor.swagger.io"
-                )
-                cors.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                cors.allowedHeaders = listOf("*")
-                cors
-            }
-            .and()
-            .csrf()
-            .disable();
-
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and();
-
-        http.exceptionHandling()
-            .authenticationEntryPoint(HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
-            .and();
-
-
-        // Set permissions on endpoints
-        http.authorizeRequests()
-            .requestMatchers("/", "/swagger-ui.html", "/webjars/**", "/swagger-resources/**", "/api-docs")
-            .permitAll() // Our public endpoints
-            .requestMatchers(HttpMethod.POST, "/createuser", "/login")
-            .permitAll()
-            .requestMatchers(HttpMethod.GET, "/api/articles/**", "/api/profiles/**", "/api/tags")
-            .permitAll() // Our private endpoints
-//            .anyRequest()
-//            .authenticated()
-
-        http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter::class.java)
-
-        return http.build()
-    }
-
-    @Bean
-    fun userDetailsService(): UserDetailsService {
-        val userDetails = User.withDefaultPasswordEncoder()
-            .username("user")
-            .password("password")
-            .roles("USER")
-            .build()
-        return InMemoryUserDetailsManager(userDetails)
-    }
-}

@@ -1,6 +1,9 @@
 package com.example.testfordatabase.user
 
-import jakarta.persistence.*
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.*
+
 
 @Entity
 @Table(name = "Customer")

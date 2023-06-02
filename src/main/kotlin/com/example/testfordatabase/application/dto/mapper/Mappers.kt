@@ -182,8 +182,8 @@ fun toMultipleArticlesResponseData(
     return multipleArticlesResponseData
 }
 
-fun toTagsResponseData(tags: List<String?>?): TagsResponseData? {
+fun toTagsResponseData(tags: List<String>?): TagsResponseData? {
     val tagsResponseData = TagsResponseData()
-    tagsResponseData.tags = tags
+    tagsResponseData.tags(tags)
     return tagsResponseData
 }

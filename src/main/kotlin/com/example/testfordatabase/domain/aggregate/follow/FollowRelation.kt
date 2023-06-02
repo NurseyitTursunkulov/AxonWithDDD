@@ -1,8 +1,7 @@
 package com.example.testfordatabase.domain.aggregate.follow
 
 import com.google.common.base.MoreObjects
-import jakarta.persistence.EmbeddedId
-import jakarta.persistence.Entity
+import javax.persistence.*
 import org.springframework.lang.NonNull
 
 @Entity

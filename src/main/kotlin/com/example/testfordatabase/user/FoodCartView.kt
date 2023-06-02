@@ -1,9 +1,10 @@
 package com.example.testfordatabase.user
 
-import jakarta.persistence.Entity
-import jakarta.persistence.Id
+
 import org.springframework.data.jpa.repository.JpaRepository
 import java.util.UUID
+import javax.persistence.*
+
 @Entity
 data class FoodCartView(
         @Id

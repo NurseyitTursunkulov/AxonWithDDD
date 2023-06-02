@@ -1,86 +1,73 @@
-package com.example.testfordatabase.swagger.api;
+package com.example.testfordatabase.swagger.api
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.ApiModelProperty;
-
-import javax.validation.Valid;
-import javax.validation.constraints.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty
+import io.swagger.annotations.ApiModelProperty
+import java.util.*
+import javax.annotation.Generated
+import javax.validation.Valid
+import javax.validation.constraints.NotNull
 
 /**
  * TagsResponseData
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-03-19T14:53:52.454350+01:00[Europe/Berlin]")
-public class TagsResponseData   {
-  @JsonProperty("tags")
-  @Valid
-  private List<String> tags = new ArrayList<>();
-
-  public TagsResponseData tags(List<String> tags) {
-    this.tags = tags;
-    return this;
-  }
-
-  public TagsResponseData addTagsItem(String tagsItem) {
-    this.tags.add(tagsItem);
-    return this;
-  }
-
-  /**
-   * Get tags
-   * @return tags
-  */
-  @ApiModelProperty(required = true, value = "")
-  @NotNull
-
-
-  public List<String> getTags() {
-    return tags;
-  }
-
-  public void setTags(List<String> tags) {
-    this.tags = tags;
-  }
-
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
+@Generated(
+    value = ["org.openapitools.codegen.languages.SpringCodegen"],
+    date = "2023-03-19T14:53:52.454350+01:00[Europe/Berlin]"
+)
+class TagsResponseData {
+    @JsonProperty("tags")
+    private var tags: @Valid MutableList<String>? = ArrayList()
+    fun tags(tags: List<String>?): TagsResponseData {
+        this.tags = tags?.toMutableList()
+        return this
     }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
+
+    fun addTagsItem(tagsItem: String): TagsResponseData {
+        tags!!.add(tagsItem)
+        return this
     }
-    TagsResponseData tagsResponse = (TagsResponseData) o;
-    return Objects.equals(this.tags, tagsResponse.tags);
-  }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(tags);
-  }
-
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class TagsResponseData {\n");
-    
-    sb.append("    tags: ").append(toIndentedString(tags)).append("\n");
-    sb.append("}");
-    return sb.toString();
-  }
-
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
+    /**
+     * Get tags
+     * @return tags
+     */
+    @ApiModelProperty(required = true, value = "")
+    fun getTags(): @NotNull MutableList<String>? {
+        return tags
     }
-    return o.toString().replace("\n", "\n    ");
-  }
+
+    fun setTags(tags: List<String>?) {
+        this.tags = tags?.toMutableList()
+    }
+
+    override fun equals(o: Any?): Boolean {
+        if (this === o) {
+            return true
+        }
+        if (o == null || javaClass != o.javaClass) {
+            return false
+        }
+        val tagsResponse = o as TagsResponseData
+        return tags == tagsResponse.tags
+    }
+
+    override fun hashCode(): Int {
+        return Objects.hash(tags)
+    }
+
+    override fun toString(): String {
+        val sb = StringBuilder()
+        sb.append("class TagsResponseData {\n")
+        sb.append("    tags: ").append(toIndentedString(tags)).append("\n")
+        sb.append("}")
+        return sb.toString()
+    }
+
+    /**
+     * Convert the given object to string with each line indented by 4 spaces
+     * (except the first line).
+     */
+    private fun toIndentedString(o: Any?): String {
+        return o?.toString()?.replace("\n", "\n    ") ?: "null"
+    }
 }
-

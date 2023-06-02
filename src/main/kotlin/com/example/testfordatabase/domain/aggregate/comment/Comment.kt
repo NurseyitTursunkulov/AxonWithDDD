@@ -3,8 +3,8 @@ package com.example.testfordatabase.domain.aggregate.comment
 import com.example.testfordatabase.domain.aggregate.article.Article
 import com.example.testfordatabase.domain.aggregate.user.MyUser
 import com.google.common.base.MoreObjects
-import jakarta.persistence.*
 import java.time.Instant
+import javax.persistence.*
 import javax.validation.constraints.NotNull
 
 @Entity
