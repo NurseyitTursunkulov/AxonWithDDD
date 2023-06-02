@@ -30,17 +30,17 @@ dependencies {
 	implementation("com.fasterxml.jackson.core:jackson-databind:2.13.0")
 	implementation("io.springfox:springfox-swagger2:2.9.2")
 	implementation("io.springfox:springfox-swagger-ui:2.9.2")
-	implementation ("javax.validation:validation-api:2.0.1.Final")
-	compileOnly("javax.annotation:javax.annotation-api:1.3.2")
-	implementation("javax.servlet:javax.servlet-api:4.0.1")
+	implementation ("javax.validation:validation-api")
+	compileOnly("javax.annotation:javax.annotation-api")
+	implementation("javax.servlet:javax.servlet-api")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.openapitools:jackson-databind-nullable:0.2.1")
-	implementation("mysql:mysql-connector-java:8.0.27")
+	implementation("mysql:mysql-connector-java")
 	implementation("org.springframework.security:spring-security-core")
 	implementation("org.springframework.security:spring-security-web")
 	implementation("org.springframework.security:spring-security-config")
 	implementation("io.jsonwebtoken:jjwt:0.9.1")
-	implementation("javax.xml.bind:jaxb-api:2.2.4")
+	implementation("javax.xml.bind:jaxb-api")
 }
 
 tasks.withType<KotlinCompile> {
