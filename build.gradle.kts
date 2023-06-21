@@ -20,6 +20,7 @@ repositories {
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("org.springframework.boot:spring-boot-starter-webflux")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	runtimeOnly("com.h2database:h2")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -36,9 +37,9 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.openapitools:jackson-databind-nullable:0.2.1")
 	implementation("mysql:mysql-connector-java")
-	implementation("org.springframework.security:spring-security-core")
-	implementation("org.springframework.security:spring-security-web")
-	implementation("org.springframework.security:spring-security-config")
+//	implementation("org.springframework.security:spring-security-core")
+//	implementation("org.springframework.security:spring-security-web")
+//	implementation("org.springframework.security:spring-security-config")
 	implementation("io.jsonwebtoken:jjwt:0.9.1")
 	implementation("javax.xml.bind:jaxb-api")
 }
