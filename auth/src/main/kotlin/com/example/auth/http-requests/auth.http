@@ -1,0 +1,426 @@
+# For a quick start check out our HTTP Requests collection (Tools|HTTP Client|Open HTTP Requests Collection) or
+# paste cURL into the file and request will be converted to HTTP Request format.
+#
+# Following HTTP Request Live Templates are available:
+# * 'gtrp' and 'gtr' create a GET request with or without query parameters;
+# * 'ptr' and 'ptrp' create a POST request with a simple or parameter-like body;
+# * 'mptr' and 'fptr' create a POST request to submit a form with a text or file field (multipart/form-data);
+
+# REGISTER
+POST {{base-url}}/
+Content-Type: application/json
+
+{
+  "user": {
+    "email": "drag1@gmail.com",
+    "username": "drag1",
+    "password": "1234"
+  }
+}
+
+> {%
+ client.assert(typeof response.body.user.token !== "undefined", "No token returned");
+ client.global.set("auth_token", response.body.user.token);
+ %}
+
+###
+
+# CURRENT USER
+POST {{base-url}}/create
+Accept: application/json
+Authorization: Token {{auth_token}}
+
+###
+
+# LOGIN
+GET {{base-url}}/customers/allCustomers2
+Content-Type: application/json
+
+{
+  "user": {
+    "email": "drag1@gmail.com",
+    "password": "1234"
+  }
+}
+
+> {%
+ client.assert(typeof response.body.user.token !== "undefined", "No token returned");
+ client.global.set("auth_token", response.body.user.token);
+ %}
+
+###
+
+# LOGIN
+GET {{base-url}}/customers/find
+Content-Type: application/json
+
+{
+  "user": {
+    "email": "drag1@gmail.com",
+    "password": "1234"
+  }
+}
+
+> {%
+    client.assert(typeof response.body.user.token !== "undefined", "No token returned");
+    client.global.set("auth_token", response.body.user.token);
+%}
+
+# UPDATE USER
+PUT {{base-url}}/user
+Content-Type: application/json
+Authorization: Token {{auth_token}}
+
+{
+  "user": {
+    "bio": "I work here too",
+    "image": "https://image2.com"
+  }
+}
+
+###
+
+# GET ALL USERS
+GET {{base-url}}/customers/profiles/finduser/john
+Accept: application/json
+Content-Type: application/json
+
+{
+  "username": "john",
+  "bio": "Hello, I'm John!",
+  "image": "https://image.com/john.jpg"
+}
+###
+###
+
+# GET ALL USERS
+
+GET {{base-url}}/customers/profiles/saveuser/john
+Accept: application/json
+Content-Type: application/json
+
+{
+  "username": "john",
+  "bio": "Hello, I'm John!",
+  "image": "https://image.com/john.jpg"
+}
+###
+
+# GET PROFILE - NOT AUTHENTICATED
+POST {{base-url}}/profiles/huk/follow
+Accept: application/json
+
+###
+
+# GET PROFILE - AUTHENTICATED
+POST {{base-url}}/customers/createCustomer
+Accept: application/json
+Authorization: Token {{auth_token}}
+
+###
+# UPDATE ARTICLE
+POST {{base-url}}/createuser  HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "user": {
+    "username": "huk",
+    "email": "huk@mail.ru?",
+    "password": "You have to believe. Please"
+  }
+}
+
+
+###
+# UPDATE ARTICLE
+POST {{base-url}}/login  HTTP/1.1
+Content-Type: application/json
+
+{
+  "user": {
+    "email": "huk@mail.ru?",
+    "password": "You have to believe. Please"
+  }
+}
+
+
+### FOLLOW USER
+GET {{base-url}}/getcurrentuser
+Accept: application/json
+Authorization: Token {{auth_token}}
+
+###
+
+# FOLLOW USER
+POST {{base-url}}/profiles/huk/follow
+Accept: application/json
+Authorization: Token {{auth_token}}
+
+###
+
+# UNFOLLOW USER
+DELETE {{base-url}}/profiles/huk/follow
+Accept: application/json
+Authorization: Token {{auth_token}}
+
+###
+
+###
+
+# updateCurrentUser USER
+POST {{base-url}}/updateCurrentUser  HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "user": {
+    "username": "buha",
+    "email": "huk@mail.ru?",
+    "password": "You have to believe. Please",
+    "bio": "You have to believe. Please",
+    "token": "You have to believe. Please",
+    "image": "You have to believe. Please"
+  }
+}
+
+
+###
+
+###
+
+# FOLLOW USER
+GET {{base-url}}/profiles/huk
+Accept: application/json
+Authorization: Token {{auth_token}}
+
+###
+
+###
+
+# CREATE ARTICLE
+GET {{base-url}}/createArticle
+Content-Type: application/json
+Accept: application/json
+Authorization: Token {{auth_token}}
+
+{
+  "article": {
+    "title": "My puupy 2",
+    "description": "is awesome",
+    "body": "I love him 2",
+    "tagList": [
+      "home",
+      "dragons"
+    ]
+  }
+}
+
+> {%
+ if(response.body.article !== undefined && response.body.article.slug !== undefined)
+   client.global.set("slug", response.body.article.slug);
+ %}
+###
+
+# DELETE ARTICLE
+DELETE {{base-url}}/deleteArticle/my-puupy-2-905428986
+Content-Type: application/json
+Accept: application/json
+Authorization: Token {{auth_token}}
+###
+
+# CREATE ARTICLE FAVORITE
+GET {{base-url}}/createArticleFavorite/my-puupy-2-190733943
+Content-Type: application/json
+Accept: application/json
+Authorization: Token {{auth_token}}
+
+{
+  "article": {
+    "title": "My puupy 2",
+    "description": "is awesome",
+    "body": "I love him 2",
+    "tagList": [
+      "home",
+      "dragons"
+    ]
+  }
+}
+###
+###
+
+# CREATE ARTICLE
+GET {{base-url}}/updateArticle/my-puupy-2--853496925
+Content-Type: application/json
+Accept: application/json
+Authorization: Token {{auth_token}}
+
+{
+  "article": {
+    "title": "My puupy 3",
+    "description": "is not awesome",
+    "body": "I love him 2",
+    "tagList": [
+      "home",
+      "dragons"
+    ]
+  }
+}
+###
+###
+
+# CREATE ARTICLE COMMENT
+GET {{base-url}}/createArticleComment/my-puupy-2-190733943
+Content-Type: application/json
+Accept: application/json
+Authorization: Token {{auth_token}}
+
+{
+  "comment": {
+    "body": "My puupy 3"
+  }
+}
+###
+
+###
+
+# DELETE ARTICLE COMMENT
+DELETE {{base-url}}/deleteArticleComment/my-puupy-2-690960887/1
+Content-Type: application/json
+Accept: application/json
+Authorization: Token {{auth_token}}
+
+{
+  "comment": {
+    "body": "My puupy 3"
+  }
+}
+###
+
+
+###
+
+# DELETE ARTICLE COMMENT
+GET {{base-url}}/getArticleComments/my-puupy-2--1575630571
+Content-Type: application/json
+Accept: application/json
+Authorization: Token {{auth_token}}
+
+{
+  "comment": {
+    "body": "My puupy 3"
+  }
+}
+###
+
+# DROP DB
+
+GET {{base-url}}/articles/feed/20/0
+Content-Type: application/json
+
+{
+  "email": "john.doe@example.com",
+  "username": "johndoe",
+  "passwordHash": "somehashedpassword",
+  "bio": "Hello, I am John Doe.",
+  "image": "https://example.com/johndoe.jpg"
+}
+
+
+
+
+###
+
+# UPDATE ARTICLE
+PUT {{base-url}}/articles/my-puupy-2
+Accept: application/json
+Content-Type: application/json
+Authorization: Token {{auth_token}}
+
+{
+  "article": {
+    "title": "How to train your dragon 4",
+    "description": "Ever wonder how it happend?",
+    "body": "You have to believe. Please"
+  }
+}
+
+###
+
+# GET ARTICLE
+GET {{base-url}}/articles/my-puupy-2
+Accept: application/json
+
+###
+
+# FAVORITE ARTICLE
+POST {{base-url}}/articles/my-puupy-2/favorite
+Accept: application/json
+Authorization: Token {{auth_token}}
+
+###
+
+# UN-FAVORITE ARTICLE
+DELETE {{base-url}}/articles/my-puupy-2/favorite
+Accept: application/json
+Authorization: Token {{auth_token}}
+
+###
+
+# DELETE ARTICLE
+DELETE {{base-url}}/articles/how-to-train-your-dragon-23
+Authorization: Token {{auth_token}}
+
+###
+
+# GET ALL TAGS
+GET {{base-url}}/tags
+Accept: application/json
+
+###
+
+# GET ARTICLES
+GET {{base-url}}/articles
+Authorization: Token {{auth_token}}
+
+###
+
+
+# GET FEED
+GET {{base-url}}/articles/feed
+Authorization: Token {{auth_token}}
+
+###
+
+# ADD COMMENT
+POST {{base-url}}/articles/my-puupy-2/comments
+Authorization: Token {{auth_token}}
+Accept: application/json
+Content-Type: application/json
+
+{
+  "comment": {
+    "body": "sooo cute"
+  }
+}
+
+###
+
+# GET COMMENTS - AUTHORIZED
+GET {{base-url}}/articles/my-puupy-2/comments
+Authorization: Token {{auth_token}}
+Accept: application/json
+
+###
+
+# GET COMMENTS - UN-AUTHORIZED
+GET {{base-url}}/articles/my-puupy-2/comments
+Accept: application/json
+
+###
+
+# DELETE COMMENT
+DELETE {{base-url}}/articles/my-puupy-2/comments/3
+Authorization: Token {{auth_token}}
+
+###
