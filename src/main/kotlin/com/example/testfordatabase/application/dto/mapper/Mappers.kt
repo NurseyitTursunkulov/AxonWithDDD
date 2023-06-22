@@ -84,7 +84,7 @@ private fun toArticleData(
 
 fun toProfile(user: MyUser, isFollowing: Boolean): ProfileData {
     val profile = ProfileData()
-    profile.username = (user.getUsername())
+    profile.username = (user.username)
     user.bio?.let { profile.bio = it }
     profile.following = (isFollowing)
     return profile
