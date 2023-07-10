@@ -26,7 +26,7 @@ Content-Type: application/json
 ###
 
 # CURRENT USER
-POST {{base-url}}/create
+POST {{base-url}}/customers/create
 Accept: application/json
 Authorization: Token {{auth_token}}
 

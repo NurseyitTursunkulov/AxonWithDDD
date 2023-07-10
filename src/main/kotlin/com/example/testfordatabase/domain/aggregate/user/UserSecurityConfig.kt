@@ -56,7 +56,7 @@ class UserSecurityConfig @Autowired constructor(
             .antMatchers(HttpMethod.GET, "/api/articles/**", "/api/profiles/**", "/api/tags")
             .permitAll() // Our private endpoints
             .anyRequest()
-            .authenticated() // Require authentication for all other requests
+            .permitAll() // Require authentication for all other requests
 
         http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter::class.java)
 

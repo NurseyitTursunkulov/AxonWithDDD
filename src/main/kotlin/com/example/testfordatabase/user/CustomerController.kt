@@ -1,13 +1,16 @@
 package com.example.testfordatabase.user
 
+import com.example.testfordatabase.TestForDatabaseApplication
 import com.example.testfordatabase.domain.aggregate.user.MyUser
 import com.example.testfordatabase.domain.aggregate.user.UserRepository
 import com.example.testfordatabase.application.service.ProfileService.Companion.toProfileResponse
 import com.example.testfordatabase.application.service.ok
+import com.example.testfordatabase.logger
 import com.example.testfordatabase.swagger.api.ProfileResponseData
 import org.axonframework.commandhandling.gateway.CommandGateway
 import org.axonframework.messaging.responsetypes.ResponseTypes
 import org.axonframework.queryhandling.QueryGateway
+import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.util.*
@@ -38,7 +41,10 @@ class CustomerController(
         )
 
     @PostMapping("/create")
-    fun createFoodCart(): CompletableFuture<UUID> = commandGateway.send(CreateFoodCartCommand(UUID.randomUUID()))
+    fun createFoodCart(): CompletableFuture<UUID> {
+        logger.debug("hallo create")
+        return commandGateway.send(CreateFoodCartCommand(UUID.randomUUID()))
+    }
 
     @GetMapping("/allCustomers2")
     fun getAllCustomers(): List<Customer> {

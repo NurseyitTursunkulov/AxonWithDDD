@@ -5,6 +5,7 @@ import com.example.testfordatabase.domain.aggregate.user.MyUser
 import com.example.testfordatabase.domain.aggregate.user.UserRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
@@ -14,13 +15,13 @@ class SpringAuthenticationService @Autowired constructor(
 ) : AuthenticationService {
 
     override val currentMyUser: MyUser?
-        get() = curUser
-//           if( SecurityContextHolder.getContext()?.authentication?.principal  == "anonymousUser"){
-//               null
-//           }else{
-//               val ud = SecurityContextHolder.getContext()?.authentication?.principal as? UserDetails
-//               userRepository.findByEmail(ud?.username)
-//           }
+        get() =
+           if( SecurityContextHolder.getContext()?.authentication?.principal  == "anonymousUser"){
+               null
+           }else{
+               val ud = SecurityContextHolder.getContext()?.authentication?.principal as? UserDetails
+               userRepository.findByEmail(ud?.username)
+           }
 
     override val currentToken: String?
         get() = (SecurityContextHolder.getContext()?.authentication?.credentials as? String) ?:null
